@@ -1,17 +1,12 @@
 
-
 function encodedVars()
-	temp = {} --TODO: keep them there to begin with
-	for k,v in pairs(pins) do
-		temp[k] = (pinStates[v])
-	end
-	return cjson.encode(temp)
+	return cjson.encode(states)
 end
 function decodeVars(varString)
 	if varString == nil then varString = '{"0":"1","1":"1"}' end
-	temp = cjson.decode(varString)
-	for k,v in pairs(pins) do
-		setRelayState(v, temp[k])
+	states = cjson.decode(varString)
+	for k,v in pairs(states) do
+		setRelayState(k, v)
 	end
 end
 
@@ -32,23 +27,7 @@ end
 
 
 function setUpNet()
-	wifi.setmode(wifi.STATIONAP)
-	local apCfg={
-		ssid="kaay's Relay",
-		pwd="12345678",
-		auth=AUTH_WPA2_PSK,
-		channel=11,
-		hidden=0,
-		beacon=800
-	}
-	wifi.ap.config(apCfg)
-	local apIpCfg={
-		ip="192.168.64.1",
-		netmask="255.255.255.0",
-		gateway="192.168.64.1"
-	}
-	wifi.ap.setip(apIpCfg)
-	
+	wifi.setmode(wifi.STATION)
 	wifi.sta.config(wifiSSID, wifiPass)
 	tmr.alarm(0, 5000,0,function() print(wifi.sta.getip()) end)
 end
@@ -59,7 +38,7 @@ function initRelays()
 		["0"] = 7, -- 7 is GPIO13
 		["1"] = 6 -- 6 is GPIO12
 	}
-	pinStates = {}
+	states = {}
 	for k,v in pairs(pins) do
 		gpio.mode(v, gpio.OUTPUT)
 	end
@@ -67,22 +46,10 @@ function initRelays()
 end
 
 
-function setRelayState(pin, isOn)
-	pinStates[pin] = isOn and "1" or "0"
-	gpio.write(pin, isOn and gpio.HIGH or gpio.LOW)
+function setRelayState(no, isOn)
+	states[no] = isOn and "1" or "0"
+	gpio.write(pins[no], isOn and gpio.HIGH or gpio.LOW)
 end
-
-
-selectedString = " selected"
-
-function printRelayForms(conn)
-	temp = {}
-	for k,v in pairs(pins) do
-		temp[k] = (pinStates[v])
-	end
-	conn:send(encodedVars())
-end
-
 
 function serve(conn, payload)
 	local _, _, method, path, vars = string.find(payload, "([A-Z]+) (.+)?(.+) HTTP")
@@ -93,7 +60,7 @@ function serve(conn, payload)
 	
 	if (vars ~= nil) then 
 		for k, v in string.gmatch(vars, "(%w+)=(%w+)&*") do
-			local pin = (pins[tostring(k)])
+			local pin = tostring(k)
 			if(pin == nil) then
 				_GET[k] = v
 			else
@@ -102,7 +69,7 @@ function serve(conn, payload)
 		end 
 	end
 	
-	printRelayForms(conn)
+	conn:send(encodedVars())
 	
 	conn:close()
 	
