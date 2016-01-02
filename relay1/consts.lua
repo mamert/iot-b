@@ -1,2 +1,0 @@
-wifiSSID = "***"
-wifiPass = "***"

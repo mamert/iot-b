@@ -25,14 +25,6 @@ function restore_settings()
 end
 
 
-
-function setUpNet()
-	wifi.setmode(wifi.STATION)
-	wifi.sta.config(wifiSSID, wifiPass)
-	tmr.alarm(0, 5000,0,function() print(wifi.sta.getip()) end)
-end
-
-
 function initRelays()
 	pins = {
 		["0"] = 7, -- 7 is GPIO13
@@ -80,10 +72,7 @@ end
 
 ------------begin--------------
 
-dofile("consts.lua")
-
 initRelays()
-setUpNet()
 
 
 -- and run server
