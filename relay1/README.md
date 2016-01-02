@@ -1,0 +1,2 @@
+to add later:
+timer (large textfield (multiple resolution options), monotype font, write e.g. "00000000000000000000000011110000(...)" (quarters) or "hhhhhHh(...)" for "on at 6A.M., off 1h later", or more advanced: "@060000h1" for same. Maybe weekly, not daily.
