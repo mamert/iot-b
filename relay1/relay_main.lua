@@ -54,7 +54,7 @@ end
 
 function serve(conn, payload)
 	local _, _, method, path, vars = string.find(payload, "([A-Z]+) (.+)?(.+) HTTP")
-	if(method == nil)then 
+	if(method == nil)then
 		_, _, method, path = string.find(payload, "([A-Z]+) (.+) HTTP")
 	end
 	local settingsChanged = false
@@ -62,12 +62,8 @@ function serve(conn, payload)
 	if (vars ~= nil) then 
 		for k, v in string.gmatch(vars, "(%w+)=(%w+)&*") do
 			local pin = tostring(k)
-			if(pin == nil) then
-				--
-			else
-				setRelayState(pin, v)
-				settingsChanged = true
-			end
+			setRelayState(pin, v)
+			settingsChanged = true
 		end 
 	end
 	
@@ -85,8 +81,8 @@ initRelays()
 
 
 -- and run server
-srv=net.createServer(net.TCP) 
-srv:listen(80, function(conn) 
+srv=net.createServer(net.TCP)
+srv:listen(80, function(conn)
 	conn:on("receive",function(conn,payload)
 		serve(conn, payload)
 		collectgarbage()
