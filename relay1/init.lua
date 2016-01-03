@@ -2,9 +2,5 @@
 --file.remove("relay_main.lua")
 --dofile("relay_main.lc")
 
-file.open("restarts.txt", "a+")
-file.write('+')
-file.close()
-
 dofile("config.lua")
 dofile("relay_main.lua")
