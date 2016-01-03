@@ -56,14 +56,13 @@ function serve(conn, payload)
 	if(method == nil)then 
 		_, _, method, path = string.find(payload, "([A-Z]+) (.+) HTTP")
 	end
-	local _GET = {}
 	local settingsChanged = false
 	
 	if (vars ~= nil) then 
 		for k, v in string.gmatch(vars, "(%w+)=(%w+)&*") do
 			local pin = tostring(k)
 			if(pin == nil) then
-				_GET[k] = v
+				--
 			else
 				setRelayState(pin, tonumber(v))
 				settingsChanged = true
