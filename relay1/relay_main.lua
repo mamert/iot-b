@@ -47,6 +47,7 @@ end
 
 
 function setRelayState(no, isOn)
+	no = tostring(no)
 	isOn = tonumber(isOn)
 	states[no] = isOn
 	gpio.write(pins[no], isOn) -- LOW=0, HIGH=1
@@ -61,8 +62,7 @@ function serve(conn, payload)
 	
 	if (vars ~= nil) then 
 		for k, v in string.gmatch(vars, "(%w+)=(%w+)&*") do
-			local pin = tostring(k)
-			setRelayState(pin, v)
+			setRelayState(k, v)
 			settingsChanged = true
 		end 
 	end
