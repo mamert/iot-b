@@ -53,6 +53,14 @@ function setRelayState(no, isOn)
 	gpio.write(pins[no], isOn) -- LOW=0, HIGH=1
 end
 
+
+proc = {
+  ["0"] = function(x) setRelayState("0", x) end,
+  ["1"] = function(x) setRelayState("1", x) end,
+  ["zero"] = function(x) states["resets"]=0 end,
+}
+
+
 function serve(conn, payload)
 	local _, _, method, path, vars = string.find(payload, "([A-Z]+) (.+)?(.+) HTTP")
 	if(method == nil)then
@@ -62,15 +70,21 @@ function serve(conn, payload)
 	
 	if (vars ~= nil) then 
 		for k, v in string.gmatch(vars, "(%w+)=(%w+)&*") do
-			setRelayState(k, v)
-			settingsChanged = true
+			local func=(proc[k])
+			if func~=nil then
+				func(v)
+				settingsChanged = true
+			end
 		end 
 	end
 	
 	conn:send(encodedVars())
 	conn:close()
 	
-	if(settingsChanged) then store_settings() end
+	if(settingsChanged) then
+		store_settings()
+		settingsChanged=false
+	end
 end
 
 
