@@ -7,7 +7,7 @@ function decodeVars(varString)
 	states = cjson.decode(varString)
 	for k,v in pairs(states) do
 		if tonumber(k)~=nil then
-			setRelayState(k, tonumber(v))
+			setRelayState(k, v)
 		end
 	end
 	if isReset then
@@ -47,6 +47,7 @@ end
 
 
 function setRelayState(no, isOn)
+	isOn = tonumber(isOn)
 	states[no] = isOn
 	gpio.write(pins[no], isOn) -- LOW=0, HIGH=1
 end
@@ -64,7 +65,7 @@ function serve(conn, payload)
 			if(pin == nil) then
 				--
 			else
-				setRelayState(pin, tonumber(v))
+				setRelayState(pin, v)
 				settingsChanged = true
 			end
 		end 
