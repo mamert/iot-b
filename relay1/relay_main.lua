@@ -92,7 +92,8 @@ end
 ------------begin--------------
 
 initRelays()
-
+local mod_sonoff = require "mod_sonoff"
+mod_sonoff.init()
 
 -- and run server
 srv=net.createServer(net.TCP)

@@ -8,3 +8,6 @@ generic GPIO control
 * arg: how long to hold (note: pullups!)
 * DATA: json of delay-change tuples
 * evolve: WS2812B, etc
+
+
+relay: add persistence?
