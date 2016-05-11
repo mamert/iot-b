@@ -13,9 +13,8 @@ local LED_TICK = 2000 -- milliseconds
 local LED_TICK_DUTY = 128 -- X/1024 of TIMER_LED_TIME_TICK that LED stays on. We're assuming no float support.
 local relay_is_on = false -- TODO: currently likely to desync
 
-local mod_sonoff = {}
 
-function mod_sonoff.init()
+function init()
 	gpio.mode(PIN_LED, gpio.OUTPUT)
 	tmr.alarm(TIMER_LED_1, LED_TICK, tmr.ALARM_AUTO, function () -- timer turns LED on
 		gpio.write(PIN_LED, gpio.LOW)
@@ -26,7 +25,7 @@ function mod_sonoff.init()
 	prep_button()
 end
 
-function mod_sonoff.relay(val)
+function relay(val)
 	gpio.write(PIN_RELAY, val and gpio.HIGH or gpio.LOW)
 	relay_is_on = val
 end
@@ -38,7 +37,7 @@ function pressed()
 end
 function released()
 	tmr.delay(10)
-	mod_sonoff.relay(val)
+	relay(val)
 	gpio.trig(PIN_BUTTON,"down",pressed)
 end
 function prep_button()
@@ -47,4 +46,8 @@ function prep_button()
 end
 
 
-return mod_sonoff
+
+return {
+  init = init,
+  relay = relay,
+}
