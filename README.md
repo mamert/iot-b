@@ -11,3 +11,5 @@ generic GPIO control
 
 
 relay: add persistence?
+
+in init: execute module that compiles & deletes all lua files
