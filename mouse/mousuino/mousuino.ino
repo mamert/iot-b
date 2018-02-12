@@ -28,11 +28,11 @@ void setup() {
     #endif
 
     Serial.begin(38400);
-    while (!Serial) {
-    ; // wait for serial port to connect. Needed for Leonardo only
-    }
-
-    delay(1000);
+//    while (!Serial) {
+//    ; // wait for serial port to connect. Needed for Leonardo only
+//    }
+    delay(10); // we don't really care about serial if not connected, so just this instead
+    
     // initialize device
     Serial.println("Initializing I2C devices...");
     accelgyro.initialize();
