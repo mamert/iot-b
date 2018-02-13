@@ -1,6 +1,7 @@
 // Arduino sketch that returns calibration offsets for MPU6050 
 //   Version 1.1  (31th January 2014)
 // Done by Luis Ródenas <luisrodenaslorda@gmail.com>
+// with minor result print modification
 // Based on the I2Cdev library and previous work by Jeff Rowberg <jeff@rowberg.net>
 // Updates (of the library) should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
  
@@ -125,20 +126,15 @@ void loop() {
     Serial.print("\t");
     Serial.println(mean_gz);
     Serial.print("Your offsets:\t");
-    Serial.print(ax_offset); 
-    Serial.print("\t");
-    Serial.print(ay_offset); 
-    Serial.print("\t");
-    Serial.print(az_offset); 
-    Serial.print("\t");
-    Serial.print(gx_offset); 
-    Serial.print("\t");
-    Serial.print(gy_offset); 
-    Serial.print("\t");
-    Serial.println(gz_offset); 
-    Serial.println("\nData is printed as: acelX acelY acelZ giroX giroY giroZ");
+    // print calibration commands
+    Serial.print("mpu.setXGyroOffset("); Serial.print(gx_offset); Serial.println(");"); 
+    Serial.print("mpu.setYGyroOffset("); Serial.print(gy_offset); Serial.println(");"); 
+    Serial.print("mpu.setZGyroOffset("); Serial.print(gz_offset); Serial.println(");"); 
+    Serial.print("mpu.setXAccelOffset("); Serial.print(ax_offset); Serial.println(");");    
+    Serial.print("mpu.setYAccelOffset("); Serial.print(ay_offset); Serial.println(");");    
+    Serial.print("mpu.setZAccelOffset("); Serial.print(az_offset); Serial.println(");");
+
     Serial.println("Check that your sensor readings are close to 0 0 16384 0 0 0");
-    Serial.println("If calibration was succesful write down your offsets so you can set them in your projects using something similar to mpu.setXAccelOffset(youroffset)");
     while (1);
   }
 }
