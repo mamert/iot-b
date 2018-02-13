@@ -127,12 +127,12 @@ void loop() {
     Serial.println(mean_gz);
     Serial.print("Your offsets:\t");
     // print calibration commands
-    Serial.print("mpu.setXGyroOffset("); Serial.print(gx_offset); Serial.println(");"); 
-    Serial.print("mpu.setYGyroOffset("); Serial.print(gy_offset); Serial.println(");"); 
-    Serial.print("mpu.setZGyroOffset("); Serial.print(gz_offset); Serial.println(");"); 
-    Serial.print("mpu.setXAccelOffset("); Serial.print(ax_offset); Serial.println(");");    
-    Serial.print("mpu.setYAccelOffset("); Serial.print(ay_offset); Serial.println(");");    
+    Serial.print("mpu.setXAccelOffset("); Serial.print(ax_offset); Serial.println(");");
+    Serial.print("mpu.setYAccelOffset("); Serial.print(ay_offset); Serial.println(");");
     Serial.print("mpu.setZAccelOffset("); Serial.print(az_offset); Serial.println(");");
+    Serial.print("mpu.setXGyroOffset("); Serial.print(gx_offset); Serial.println(");");
+    Serial.print("mpu.setYGyroOffset("); Serial.print(gy_offset); Serial.println(");");
+    Serial.print("mpu.setZGyroOffset("); Serial.print(gz_offset); Serial.println(");");
 
     Serial.println("Check that your sensor readings are close to 0 0 16384 0 0 0");
     while (1);
