@@ -125,7 +125,7 @@ void loop() {
     Serial.print(mean_gy); 
     Serial.print("\t");
     Serial.println(mean_gz);
-    Serial.print("Your offsets:\t");
+    Serial.print("Your offsets:\n");
     // print calibration commands
     Serial.print("mpu.setXAccelOffset("); Serial.print(ax_offset); Serial.println(");");
     Serial.print("mpu.setYAccelOffset("); Serial.print(ay_offset); Serial.println(");");
