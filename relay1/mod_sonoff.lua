@@ -6,7 +6,7 @@
 local PIN_RELAY = 6
 local PIN_LED = 7
 local PIN_BUTTON = 3
-local BTN_THROTTLE_PERIOD = 50000 -- microseconds
+local BTN_THROTTLE_PERIOD = 40000 -- microseconds
 local btnLastClick = 0
 local TIMER_LED_1 = 6 -- timers range 0-6
 local TIMER_LED_2 = 5 -- TODO: use only 1
@@ -38,18 +38,23 @@ function init(relayToggleFunc)
 	prep_button()
 end
 
-function pressed()
+function btnChanged()
+	local b = gpio.read(PIN_BUTTON)
 	local now = tmr.now()
-	local delta = now - btnLastClick
-	if delta < 0 then delta = delta + 2147483647 end; -- timer.now() uint31 rollover, see http://www.esp8266.com/viewtopic.php?f=24&t=4833&start=5#p29127
-	if delta > BTN_THROTTLE_PERIOD then
+	if b>0 then
+		print("b="..gpio.read(PIN_BUTTON))
+		local delta = now - btnLastClick
+		if delta < 0 then delta = delta + 2147483647 end; -- timer.now() uint31 rollover, see http://www.esp8266.com/viewtopic.php?f=24&t=4833&start=5#p29127
+		if delta > BTN_THROTTLE_PERIOD then
+			relayToggler("sonoff")
+		end;
+	else
 		btnLastClick = now
-		relayToggler("sonoff")
-	end;
+	end
 end
 function prep_button()
 	gpio.mode(PIN_BUTTON,gpio.INT,gpio.PULLUP)
-	gpio.trig(PIN_BUTTON,"down",pressed)
+	gpio.trig(PIN_BUTTON,"both",btnChanged)
 end
 
 function setRelay(symbol, isOn)
