@@ -21,6 +21,12 @@ function initRelays()
 		end
 	end
 	
+	--local mod_relay = require "mod_motors"
+	--mod_relay.init()
+	--for k, v in pairs(mod_relay.getOtherCommands()) do
+	--	proc[k] = v
+	--end
+	
 	restore_settings()
 end
 
