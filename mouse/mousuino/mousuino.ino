@@ -2,6 +2,7 @@
 #include "I2Cdev.h"
 #include "MPU6050.h"
 #include <Mouse.h>
+#include <Bounce2.h>
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
     #include "Wire.h"
@@ -18,6 +19,11 @@ int16_t sensitivityDivider = 250;
 
 signed char mouseVX, mouseVY;
 
+
+const unsigned long BTN_THROTTLE_DELAY = 40;
+const int btnPin[] = {10, 16, 14};
+const char mouseBtn[] = {MOUSE_LEFT, MOUSE_MIDDLE, MOUSE_RIGHT};
+Bounce * btn = new Bounce[3];
 
 
 void setup() {
@@ -41,6 +47,11 @@ void setup() {
 
     Serial.println("Updating internal sensor offsets...");
     mpu6050_setOffsets(accelgyro);
+
+    for(int i = 0; i < 3; i++){
+      btn[i].attach(btnPin[i], INPUT_PULLUP);
+      btn[i].interval(BTN_THROTTLE_DELAY);
+    }
 }
 
 void loop() {
@@ -56,6 +67,18 @@ void loop() {
     mouseVY = -gz/sensitivityDivider;
     Mouse.move(mouseVX, mouseVY);
   
+    processBtns();
     delay(15);
+}
+
+void processBtns(){
+  for(int i = 0; i < 3; i++){
+    btn[i].update();
+    if (btn[i].fell()) {
+      Mouse.press(mouseBtn[i]);
+    } else if(btn[i].rose()){
+      Mouse.release(mouseBtn[i]);
+    }
+  }
 }
 
