@@ -19,6 +19,10 @@ function initRelays()
 			print('0 setRelayState x='..(x and x or 'nil'))
 			setRelayState(mod_sonoff, k, x)
 		end
+	local mod_relay = require "mod_motor_l293d"
+	mod_relay.init()
+	for k, v in pairs(mod_relay.getOtherCommands()) do
+		proc[k] = v
 	end
 	
 	--local mod_relay = require "mod_motors"
@@ -108,7 +112,7 @@ function serve(conn, payload)
 	
 	if vars ~= nil then 
 		print(vars..'\n')	
-		for k, v in string.gmatch(vars, "(%w+)=(%w+)&*") do
+		for k, v in string.gmatch(vars, "(%w+)=([%w-.]+)&*") do
 			if callProc(k,v) then
 				settingsChanged = true
 			end
