@@ -20,7 +20,7 @@ local GPIO = {
 		
 local mymodule = {
 	GPIO = GPIO,
-	SDA = GPIO[12],--12 / 5
+	SDA = GPIO[12],--12 / 4
 	SCL = GPIO[14] --14 / 5
 }
 
