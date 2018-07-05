@@ -68,7 +68,7 @@ selMode = mode.single
 capacityString = "81%"
 
 wifi.setmode(wifi.NULLMODE)
-init_OLED(1,2)
+init_OLED()
 
 local BTN_THROTTLE_PERIOD = 40000 -- microseconds
 function btnChanged()
