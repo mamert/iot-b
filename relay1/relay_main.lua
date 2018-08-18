@@ -19,6 +19,7 @@ function initRelays()
 			print('0 setRelayState x='..(x and x or 'nil'))
 			setRelayState(mod_sonoff, k, x)
 		end
+	end
 	local mod_relay = require "mod_motor_l293d"
 	mod_relay.init()
 	for k, v in pairs(mod_relay.getOtherCommands()) do
