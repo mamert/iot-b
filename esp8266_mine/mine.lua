@@ -31,11 +31,8 @@ end
 
 
 
-function main()
-	print("started")
-	tmr.create():alarm(1000, tmr.ALARM_AUTO, function() play("tick.wav") end)
-end
+
+tmr.create():alarm(1000, tmr.ALARM_AUTO, function() play("tick.wav") end)
 
 
-print("Giving 3s to recover if program crashes on boot")
-tmr.create():alarm(3000, tmr.ALARM_SINGLE, main)
+
