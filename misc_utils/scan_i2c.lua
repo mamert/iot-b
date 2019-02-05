@@ -2,8 +2,8 @@
 -- Scan for I2C devices
 
 id=0
-sda=8
-scl=9
+sda=2
+scl=4
 
 -- initialize i2c, set pin1 as sda, set pin0 as scl
 
