@@ -3,6 +3,8 @@ local hw = require "hw"
 
 function main()
 	print("started")
+	pwm.setup(hw.SPEAKER, 400, 512)
+	pwm.start(hw.SPEAKER)
 end
 
 
