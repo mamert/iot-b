@@ -3,8 +3,8 @@ local hw = require "hw"
 
 function main()
 	print("started")
-	pwm.setup(hw.SPEAKER, 400, 512)
-	pwm.start(hw.SPEAKER)
+	sigma_delta.setup(hw.SPEAKER)
+	sigma_delta.setpwmduty(100) --0..255 (255 is NOT 100%!)
 end
 
 
