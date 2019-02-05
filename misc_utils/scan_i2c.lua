@@ -1,4 +1,3 @@
--- based on http://www.esp8266.com/viewtopic.php?f=19&t=771
 -- Scan for I2C devices
 
 id=0 -- ALWAYS 0
@@ -18,9 +17,19 @@ function testAllAddresses(sda,scl)
 	return found
 end
 
+function testAllPins(possiblePins)
+	local found=false
+	for i, sda in ipairs(possiblePins) do
+		for j, scl in ipairs(possiblePins) do
+			if (sda ~= scl) then
+				found = testAllAddresses(sda,scl) or found
+			end
+		end
+	end
+	return found
+end
 
 
-found = testAllAddresses(2,4)
-found = testAllAddresses(4,2) or found
+found = testAllPins({3,4,2,1,6,7,5}) -- these are the only ones that might work on ESP8266. Others crash.
 if(not found) then print("Nothing found") end
 
