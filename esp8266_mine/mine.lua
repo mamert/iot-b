@@ -26,13 +26,13 @@ function play(fileName)
 		file.open(fileName,"r")
 		if drv==nil then setUpPCM() end
 	end
-	drv:play(pcm.RATE_8K)
+	drv:play(pcm.RATE_16K)
 end
 
 
 
 
-tmr.create():alarm(1000, tmr.ALARM_AUTO, function() play("tick.wav") end)
+tmr.create():alarm(1000, tmr.ALARM_AUTO, function() play("beep_8bit16kHz.aiff") end)
 
 
 
