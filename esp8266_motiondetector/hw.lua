@@ -21,7 +21,7 @@ local GPIO = { -- 2-7 work with everything
 local mymodule = {
 	GPIO = GPIO,
 	
-	TRIGGER = GPIO[5],
+	TRIGGER = GPIO[4], -- mislabeled on my ESP-07 as GPIO5
 	PIEZO = GPIO[14],
 	LED = GPIO[2],
 }
