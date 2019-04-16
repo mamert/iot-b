@@ -35,9 +35,7 @@ void setup() {
     #endif
 
     Serial.begin(38400);
-//    while (!Serial) {
-//    ; // wait for serial port to connect. Needed for Leonardo only
-//    }
+//    while (!Serial); // wait for serial port to connect. Needed for Leonardo only
     delay(10); // we don't really care about serial if not connected, so just this instead
     
     Serial.println("Initializing MPU-6050");
