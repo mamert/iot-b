@@ -19,7 +19,7 @@ InputAxis::InputAxis(int axisAnalogPin,
   pinMode(_axisAnalogPin, INPUT);
 }
 
-void InputAxis::refresh() {
+void InputAxis::update() {
   int tmp = analogRead(_axisAnalogPin);
 //    Serial.println(tmp);
 //    Serial.print("\t");

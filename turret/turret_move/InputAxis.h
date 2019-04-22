@@ -17,7 +17,7 @@ class InputAxis {
           int inValMin, int inValCenter, int inValMax, int inValDeadzone,
           int outValMin, int outValMax);
 
-    void refresh();
+    void update();
     
   private:
     int _axisAnalogPin;
