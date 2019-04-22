@@ -1,3 +1,5 @@
+#include "InputAxis.h"
+
 // Arduino pin assignments:
 // Joystick
 int ax1Pin = A0;
@@ -27,17 +29,10 @@ int threshold = 80;
 int centerA = 509;
 int centerB = 523;
 
-// for map(): where the mapping starts
-int inMapInRangeAL = centerA-threshold;
-int inMapInRangeAR = 1023-centerA-threshold;
-int inMapInRangeBL = centerB-threshold;
-int inMapInRangeBR = 1023-centerB-threshold;
-
+InputAxis *ax1, *ax2;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(ax1Pin, INPUT);
-  pinMode(ax2Pin, INPUT);
   pinMode(trigPin, INPUT_PULLUP); // needs external pullup, actually
   pinMode(outA1Pin, OUTPUT);
   pinMode(outA2Pin, OUTPUT);
@@ -45,42 +40,33 @@ void setup() {
   pinMode(outB1Pin, OUTPUT);
   pinMode(outB2Pin, OUTPUT);
   pinMode(outBEnPin, OUTPUT);
+  ax1 = new InputAxis(ax1Pin, 0, centerA, 1023, threshold, 80, 255);
+  ax2 = new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 80, 255);
 }
 
 void loop() {
-  ax1Val = analogRead(ax1Pin);
-  ax2Val = analogRead(ax2Pin);
-  trigVal = digitalRead(trigPin);
+  ax1->refresh();
+  ax2->refresh();
+//  trigVal = digitalRead(trigPin);
+//  Serial.println(trigVal);
   
-  Serial.print(ax1Val);
-  Serial.print("\t");
-  Serial.print(ax2Val);
-  Serial.print("\t");
-  Serial.println(trigVal);
-  
-//  delay(100);
   delay(30);
-  moveA(ax1Val);
-  moveB(ax2Val);
+  moveA(ax1);
+  moveB(ax2);
 }
 
 
-void moveA(int val) {
-  move(outA1Pin, outA2Pin, outAEnPin, centerA, inMapInRangeAL, inMapInRangeAR, val);
+void moveA(InputAxis *axis) {
+  move(outA1Pin, outA2Pin, outAEnPin, axis);
 }
 
-void moveB(int val) {
-  move(outB1Pin, outB2Pin, outBEnPin, centerB, inMapInRangeBL, inMapInRangeBR, val);
+void moveB(InputAxis *axis) {
+  move(outB1Pin, outB2Pin, outBEnPin, axis);
 }
 
-void move(int pin1, int pin2, int pwmPin, int center, int inMapInRangeL, int inMapInRangeR, int val) {
-  int tmp = val - center;
-  bool isRight = tmp >= 0;
-  int absVal = abs(tmp);
-  absVal = max(0, absVal-threshold);
+void move(int pin1, int pin2, int pwmPin, InputAxis *axis) {
+  analogWrite(pwmPin, axis->outVal);
   
-  analogWrite(pwmPin, map(absVal, 0, isRight ? inMapInRangeR : inMapInRangeL, 80, 255));
-  
-  digitalWrite(pin1, isRight ? LOW : (absVal>0 ? HIGH : LOW));
-  digitalWrite(pin2, isRight ? (absVal>0 ? HIGH : LOW) : LOW);  
+  digitalWrite(pin1, axis->isForward ? LOW : (axis->outVal > 0 ? HIGH : LOW));
+  digitalWrite(pin2, axis->isForward ? (axis->outVal > 0 ? HIGH : LOW) : LOW);  
 }
