@@ -9,12 +9,19 @@ int trigPin = 13;
 // motor driver
 int outA1Pin = 4;
 int outA2Pin = 2;
-int outAEnPin = 6;
+int outAEnPin = 6; // Timer0
 int outB1Pin = 8;
 int outB2Pin = 7;
-int outBEnPin = 5;
+int outBEnPin = 5; // Timer0
 
-// also available for later use on arm thing: GPIO10(PWM), 11(PWM), 12 as green, white & yellow cable
+// also available for later use on arm thing:
+// 03(PWM T2): thin green
+// 11(PWM T2): thin white
+// 12: thin yellow
+// 10(PWM T1): white jumper
+// 09(PWM T1): grey jumper
+// A2: brown jumper
+// A3: orange jumper
 
 // hardware calibration
 int threshold = 80;
