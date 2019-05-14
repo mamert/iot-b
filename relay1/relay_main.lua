@@ -130,22 +130,24 @@ function serve(conn, payload)
 end
 
 
+function onIPAcquired(T)
+	print(T.IP)
+	initRelays()
+
+	-- and run server
+	srv=net.createServer(net.TCP)
+	srv:listen(80, function(conn)
+		conn:on("receive",function(conn,payload)
+			serve(conn, payload)
+			collectgarbage()
+		end) 
+	end)
+	print('server started\n')
+end
 
 ------------begin--------------
 
-print('init\n')
-initRelays()
 
-print('init\'d\n')
--- and run server
-srv=net.createServer(net.TCP)
-srv:listen(80, function(conn)
-	conn:on("receive",function(conn,payload)
-		serve(conn, payload)
-		collectgarbage()
-	end) 
-end)
-
-print('server started\n')
 
 	
+wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, onIPAcquired)
