@@ -119,7 +119,7 @@ function serve(conn, payload)
 			end
 		end
 	end
-	
+	conn:send("HTTP/1.0 200 OK\r\nServer: NodeMCU\r\nContent-Type: application/json\r\n\r\n")
 	conn:send(encodedVars())
 	conn:close()
 	
