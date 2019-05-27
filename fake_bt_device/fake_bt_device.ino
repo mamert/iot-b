@@ -49,6 +49,11 @@ class MyServerCallbacks: public BLEServerCallbacks {
 void setup() {
   Serial.begin(115200);
 
+  // Spoof MAC
+  uint8_t mac[6] {0xC8, 0xB2, 0x1E, 0x40, 0xE9, 0x89};
+  // note: mac[0] = mac[0] & ~0x01; to make sure it's unicast, not multicast
+  esp_base_mac_addr_set(mac);
+
   // Create the BLE Device
   BLEDevice::init("fakeSomething");
 
