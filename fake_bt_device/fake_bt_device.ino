@@ -30,8 +30,8 @@ uint8_t value = 0;
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
 
-#define SERVICE_UUID        "41c0c650-b1bf-11e7-abc4-cec278b6b50a"
-#define CHARACTERISTIC_UUID "d9eb2321-87fe-47b2-b5f4-bb33b79fa6cd"
+#define SERVICE_UUID        "0000fff0-0000-1000-8000-00805f9b34fb"
+#define CHARACTERISTIC_UUID "0000fff1-0000-1000-8000-00805f9b34fb"
 
 
 class MyServerCallbacks: public BLEServerCallbacks {
