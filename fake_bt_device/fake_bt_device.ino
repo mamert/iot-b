@@ -25,7 +25,7 @@ BLEServer* pServer = NULL;
 BLECharacteristic* pCharacteristic = NULL;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
-uint8_t value = 0;
+uint8_t value[19] {0xCA, 0x10, 0x0f, 0x01, 0x01, 0x02, 0xAF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xB2};
 
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
@@ -91,9 +91,9 @@ void setup() {
 void loop() {
     // notify changed value
     if (deviceConnected) {
-        pCharacteristic->setValue(&value, 1);
+        pCharacteristic->setValue(value, 19);
         pCharacteristic->notify();
-        value = (value + 1) % 60;
+        //value = (value + 1) % 60;
         delay(1000); // bluetooth stack will go into congestion, if too many packets are sent, in 6 hours test i was able to go as low as 3ms
     }
     // disconnecting
