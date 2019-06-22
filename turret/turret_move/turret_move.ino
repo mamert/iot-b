@@ -8,17 +8,17 @@ int ax1Pin = A0;
 int ax2Pin = A1;
 int trigPin = 13;
 // L298N motor driver
-int outA1Pin = 4;
-int outA2Pin = 2;
+int outA1Pin = 2;
+int outA2Pin = 4;
 int outAEnPin = 6; // Timer0
 int outB1Pin = 8;
 int outB2Pin = 7;
 int outBEnPin = 5; // Timer0
 // BTS7960 motor driver
-int outCLEnPin = A2; // brown jumper
-int outCLPwmPin = 10; // white jumper
-int outCREnPin = A3; // orange jumper
-int outCRPwmPin = 9; // grey jumper
+int outCLEnPin = A3; // brown jumper
+int outCLPwmPin = 9; // white jumper
+int outCREnPin = A2; // orange jumper
+int outCRPwmPin = 10; // grey jumper
 // also available for later use on arm thing:
 // 03(PWM T2): thin green
 // 11(PWM T2): thin white
