@@ -41,7 +41,7 @@ void setup() {
   Serial.begin(115200);
   pinMode(trigPin, INPUT_PULLUP); // needs external pullup, actually
   ax1 = new L298N(outA1Pin, outA2Pin, outAEnPin,
-      new InputAxis(ax1Pin, 0, centerA, 1023, threshold, 90, 255));
+      new InputAxis(ax1Pin, 0, centerA, 1023, threshold, 105, 255));
 //  ax2 = new L298N(outB1Pin, outB2Pin, outBEnPin,
 //      new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 80, 255));
   ax3 = new BTS7960(outCLEnPin, outCLPwmPin, outCREnPin, outCRPwmPin,
