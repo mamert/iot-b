@@ -8,13 +8,14 @@
 
 
 EXPAND io(0x01);      //port expander with address 0x01
-
+// has "Slave_I2C_Port_Expander" sketch on it
 
 // Arduino pin assignments:
 // Joystick
 int ax1Pin = A0;
 int ax2Pin = A1;
 int trigPin = 13;
+int fireBtn = 12;
 // motor driver
 int outA1Pin = 4;
 int outA2Pin = 2;
