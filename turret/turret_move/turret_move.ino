@@ -1,5 +1,14 @@
+// include wire library first
+#include <Wire.h>
+// include port expander library second
+#include <Arduino_I2C_Port_Expander.h>
+
 #include "InputAxis.h"
 #include "L298N.h"
+
+
+EXPAND io(0x01);      //port expander with address 0x01
+
 
 // Arduino pin assignments:
 // Joystick
@@ -28,12 +37,13 @@ int centerB = 523;
 L298N *ax1, *ax2;
 
 void setup() {
+  Wire.begin();
   Serial.begin(115200);
   pinMode(trigPin, INPUT_PULLUP); // needs external pullup, actually
   ax1 = new L298N(outA1Pin, outA2Pin, outAEnPin,
-      new InputAxis(ax1Pin, 0, centerA, 1023, threshold, 80, 255));
+      new InputAxis(ax1Pin, 0, centerA, 1023, threshold, 80, 255, &io));
   ax2 = new L298N(outB1Pin, outB2Pin, outBEnPin,
-      new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 80, 255));
+      new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 80, 255, &io));
 }
 
 void loop() {

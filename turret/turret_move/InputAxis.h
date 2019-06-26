@@ -2,6 +2,8 @@
 #define InputAxis_h
 #include "Arduino.h"
 
+#include <Arduino_I2C_Port_Expander.h>
+
 /*
  * distance sensor or joystick.
  * in: analog pin & calibration data
@@ -17,6 +19,10 @@ class InputAxis {
           int inValMin, int inValCenter, int inValMax, int inValDeadzone,
           int outValMin, int outValMax);
 
+    InputAxis(int axisAnalogPin,
+          int inValMin, int inValCenter, int inValMax, int inValDeadzone,
+          int outValMin, int outValMax, EXPAND *expander);
+
     void update();
     
   private:
@@ -27,6 +33,7 @@ class InputAxis {
     int _inValDeadzone;
     int _outValMin;
     int _outValMax;
+    EXPAND *_expander;
     // for map(): where the mapping starts
     int _inMapInRangeRev;
     int _inMapInRangeFwd;
