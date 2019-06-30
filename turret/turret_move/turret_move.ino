@@ -17,8 +17,8 @@ int ax2Pin = A1;
 int trigPin = 4;
 int firePin = 5;
 // motor driver
-int outA1Pin = 4;
-int outA2Pin = 2;
+int outA1Pin = 2;
+int outA2Pin = 4;
 int outAEnPin = 6;
 int outB1Pin = 8;
 int outB2Pin = 7;
