@@ -14,8 +14,8 @@ EXPAND io(0x01);      //port expander with address 0x01
 // Joystick
 int ax1Pin = A0;
 int ax2Pin = A1;
-int trigPin = 13;
-int fireBtn = 12;
+int trigPin = 4;
+int firePin = 5;
 // motor driver
 int outA1Pin = 4;
 int outA2Pin = 2;
@@ -23,6 +23,9 @@ int outAEnPin = 6;
 int outB1Pin = 8;
 int outB2Pin = 7;
 int outBEnPin = 5;
+int outTrigPin = 3;
+int outFirePin = 9;
+
 
 // also available for later use on arm thing: GPIO10(PWM), 11(PWM), 12 as green, white & yellow cable
 
@@ -40,7 +43,10 @@ L298N *ax1, *ax2;
 void setup() {
   Wire.begin();
   Serial.begin(115200);
-  pinMode(trigPin, INPUT_PULLUP); // needs external pullup, actually
+  pinMode(trigPin, INPUT_PULLUP);
+  pinMode(firePin, INPUT_PULLUP);
+  pinMode(outTrigPin, OUTPUT);
+  pinMode(outFirePin, OUTPUT);
   ax1 = new L298N(outA1Pin, outA2Pin, outAEnPin,
       new InputAxis(ax1Pin, 0, centerA, 1023, threshold, 80, 255, &io));
   ax2 = new L298N(outB1Pin, outB2Pin, outBEnPin,
@@ -50,6 +56,11 @@ void setup() {
 void loop() {
   ax1->update();
   ax2->update();
+  bool temp = io.digitalReadPullup(trigPin);
+  digitalWrite(outTrigPin, !temp); // inverted because pullup
+  temp = io.digitalReadPullup(firePin);
+  digitalWrite(outFirePin, !temp);
+  // TODO: turn off fire after maybe 0.4s, for single shot
 //  trigVal = digitalRead(trigPin);
 //  Serial.println(trigVal);
   
