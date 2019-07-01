@@ -23,8 +23,8 @@ int outAEnPin = 6;
 int outB1Pin = 8;
 int outB2Pin = 7;
 int outBEnPin = 5;
-int outTrigPin = 3;
-int outFirePin = 9;
+int outTrigPin = 9;
+int outFirePin = 3;
 
 
 // also available for later use on arm thing: GPIO10(PWM), 11(PWM), 12 as green, white & yellow cable
@@ -57,9 +57,9 @@ void loop() {
   ax1->update();
   ax2->update();
   bool temp = io.digitalReadPullup(trigPin);
-  digitalWrite(outTrigPin, !temp); // inverted because pullup
+  digitalWrite(outTrigPin, temp);
   temp = io.digitalReadPullup(firePin);
-  digitalWrite(outFirePin, !temp);
+  digitalWrite(outFirePin, temp);
   // TODO: turn off fire after maybe 0.4s, for single shot
 //  trigVal = digitalRead(trigPin);
 //  Serial.println(trigVal);
