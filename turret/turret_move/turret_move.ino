@@ -26,6 +26,8 @@ int outBEnPin = 5;
 int outTrigPin = 9;
 int outFirePin = 3;
 
+int swapAxesPin = 10;
+
 
 // also available for later use on arm thing: GPIO10(PWM), 11(PWM), 12 as green, white & yellow cable
 
@@ -43,13 +45,15 @@ L298N *ax1, *ax2;
 void setup() {
   Wire.begin();
   Serial.begin(115200);
-  pinMode(trigPin, INPUT_PULLUP);
-  pinMode(firePin, INPUT_PULLUP);
+  pinMode(swapAxesPin, INPUT_PULLUP);
   pinMode(outTrigPin, OUTPUT);
   pinMode(outFirePin, OUTPUT);
-  ax1 = new L298N(outA1Pin, outA2Pin, outAEnPin,
+  bool swapAxes = digitalRead(swapAxesPin);
+  ax1 = new L298N(swapAxes ? outA2Pin : outA1Pin, 
+      swapAxes ? outA1Pin : outA2Pin, outAEnPin,
       new InputAxis(ax1Pin, 0, centerA, 1023, threshold, 80, 255, &io));
-  ax2 = new L298N(outB1Pin, outB2Pin, outBEnPin,
+  ax2 = new L298N(swapAxes ? outB2Pin : outB1Pin, 
+      swapAxes ? outB1Pin : outB2Pin, outBEnPin,
       new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 80, 255, &io));
 }
 
