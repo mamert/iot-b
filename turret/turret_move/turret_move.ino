@@ -39,8 +39,10 @@ int threshold = 80;
 // turret
 int centerA = 509;
 int centerB = 523;
+int hMinPwm = 9;
+int vMinPwm = 8;
 
-L298N *ax1, *ax2;
+L298N *axH, *axV;
 
 void setup() {
   Wire.begin();
@@ -48,18 +50,27 @@ void setup() {
   pinMode(swapAxesPin, INPUT_PULLUP);
   pinMode(outTrigPin, OUTPUT);
   pinMode(outFirePin, OUTPUT);
+  // change PWN frequency: timer0: pins 5 & 6;
+  // why do it? No high-pitched noise, better torque @ low duty
+  // WARNING! Also affects TIME (millis(), and delay()).
+  TCCR0B = (TCCR0B & 0b11111000) | 0x05;
+  // 0x03, prescaler 64,  976.5625Hz; default
+  // 0x05, prescaler 1024,  61.03515625Hz
+
+
+  
   bool swapAxes = digitalRead(swapAxesPin);
-  ax1 = new L298N(swapAxes ? outA2Pin : outA1Pin, 
+  axH = new L298N(swapAxes ? outA2Pin : outA1Pin, 
       swapAxes ? outA1Pin : outA2Pin, outAEnPin,
-      new InputAxis(ax1Pin, 0, centerA, 1023, threshold, 80, 255, &io));
-  ax2 = new L298N(swapAxes ? outB2Pin : outB1Pin, 
+      new InputAxis(ax1Pin, 0, centerA, 1023, threshold, hMinPwm, 255, &io));
+  axV = new L298N(swapAxes ? outB2Pin : outB1Pin, 
       swapAxes ? outB1Pin : outB2Pin, outBEnPin,
-      new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 80, 255, &io));
+      new InputAxis(ax2Pin, 0, centerB, 1023, threshold, vMinPwm, 255, &io));
 }
 
 void loop() {
-  ax1->update();
-  ax2->update();
+  axH->update();
+  axV->update();
   bool temp = io.digitalReadPullup(trigPin);
   digitalWrite(outTrigPin, temp);
   temp = io.digitalReadPullup(firePin);
@@ -68,5 +79,5 @@ void loop() {
 //  trigVal = digitalRead(trigPin);
 //  Serial.println(trigVal);
   
-  delay(30);
+  delay(2); // times 16, see timer0 prescaler change in setup()
 }
