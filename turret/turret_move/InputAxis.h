@@ -23,6 +23,8 @@ class InputAxis {
           int inValMin, int inValCenter, int inValMax, int inValDeadzone,
           int outValMin, int outValMax, EXPAND *expander);
 
+    InputAxis& curve(boolean value);
+    
     void update();
     
   private:
@@ -37,6 +39,9 @@ class InputAxis {
     // for map(): where the mapping starts
     int _inMapInRangeRev;
     int _inMapInRangeFwd;
+    boolean _curve;
+    
+    int _curve_it(int val, int limit);
 };
 
 #endif

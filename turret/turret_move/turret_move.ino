@@ -39,8 +39,8 @@ int threshold = 80;
 // turret
 int centerA = 509;
 int centerB = 523;
-int hMinPwm = 9;
-int vMinPwm = 8;
+int hMinPwm = 12;
+int vMinPwm = 14;
 
 L298N *axH, *axV;
 
@@ -62,10 +62,10 @@ void setup() {
   bool swapAxes = digitalRead(swapAxesPin);
   axH = new L298N(swapAxes ? outA2Pin : outA1Pin, 
       swapAxes ? outA1Pin : outA2Pin, outAEnPin,
-      new InputAxis(ax1Pin, 0, centerA, 1023, threshold, hMinPwm, 255, &io));
+      &((new InputAxis(ax1Pin, 0, centerA, 1023, threshold, hMinPwm, 255, &io))->curve(true)));
   axV = new L298N(swapAxes ? outB2Pin : outB1Pin, 
       swapAxes ? outB1Pin : outB2Pin, outBEnPin,
-      new InputAxis(ax2Pin, 0, centerB, 1023, threshold, vMinPwm, 255, &io));
+      &((new InputAxis(ax2Pin, 0, centerB, 1023, threshold, vMinPwm, 255, &io))->curve(true)));
 }
 
 void loop() {
