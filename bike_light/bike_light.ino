@@ -1,4 +1,3 @@
-#include "LowPower.h"
 #include "LedControl.h"
 
 #include "shapes.h"
@@ -10,16 +9,17 @@ LedControl lc=LedControl(dataPin, clkPin, csPin, 1);
 
 int hshift = 0;
 
-//unsigned long refreshRate=100;
+unsigned long interval=40;
 
 ////////////////////
 
 void drawShape(byte shape[]){
-  int hshift1 = hshift-8;
+  int hshift1 = hshift-7;
   for(int i=0; i<8; i = i+1){
     byte row = 0;
-    if(hshift+1 >= 0)
-      row = shape[hshift1+1];
+    if(hshift1+i >= 0 && hshift1+i <= 7)
+      row = shape[hshift1+i];
+//    row = shape[i];
     lc.setRow(0,i,row);
   }
 }
@@ -34,7 +34,7 @@ void setup() {
 
 void drawFrame(byte shape[]) {
   drawShape(shape);
-  delay(100);
+  delay(interval);
 }
 
 void loop() {
@@ -45,5 +45,5 @@ void loop() {
   drawFrame(Pacman3);
   drawFrame(Pacman2);
   hshift = hshift+1;
-  hshift = hshift % 17;
+  hshift = hshift % 15;
 }
