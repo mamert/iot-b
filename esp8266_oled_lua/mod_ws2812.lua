@@ -2,18 +2,25 @@ local _buf
 
 local function init()
 	ws2812.init()
-	_buf = ws2812.newBuffer(6, 3)
-	ws2812_effects.init(_buf)
-	--ws2812_effects.set_speed(20) -- what?
-	ws2812_effects.set_delay(200) -- min 10
-	ws2812_effects.set_brightness(16)
+	_buf = ws2812.newBuffer(6, 3) --GRB
 end
 
+local function getColor(val)
+	ret = {}
+	ret[1] = math.max(0,val)
+	ret[2] = math.max(0,-val)
+	ret[3] = math.abs(val)>255 and 128 or 0
+	return ret
+end
 
-local function show()
-	ws2812_effects.set_mode("rainbow_cycle")
-	ws2812_effects.start()
-	--ws2812.write(string.char(32, 0, 0, 64, 0, 32, 0, 64, 0, 0, 32, 64, 16, 16, 0, 64, 0, 16, 16, 64, 16, 0, 16, 64))
+local function show(AccelX, AccelY, AccelZ, GyroX, GyroY, GyroZ)
+	_buf:set(1,getColor(AccelX))
+	_buf:set(2,getColor(AccelY))
+	_buf:set(3,getColor(AccelZ))
+	_buf:set(4,getColor(GyroX))
+	_buf:set(5,getColor(GyroY))
+	_buf:set(6,getColor(GyroZ))
+	ws2812.write(_buf)
 end
 
 

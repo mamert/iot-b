@@ -5,7 +5,7 @@ local MPU6050SlaveAddress = 0x68
 local _int_pin
 local _ondataCb
 
-local AccelScaleFactor = 16384;   -- sensitivity scale factor respective to full scale setting provided in datasheet 
+local AccelScaleFactor = 128;
 local GyroScaleFactor = 131;
 
 
