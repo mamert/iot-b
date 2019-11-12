@@ -1,5 +1,6 @@
 -- yellow header 16px 10 for font
 -- blue: exactly 7 lines
+dofile("util.lua")
 dofile("val_stats.lua")
 local fw = require "fw"
 local hw = require "hw"
