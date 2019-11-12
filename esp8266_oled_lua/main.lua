@@ -16,7 +16,7 @@ gpio.write(4, gpio.HIGH)
 wifi.setmode(wifi.NULLMODE)
 
 local i2c_id = 0
-i2c.setup(i2c_id, hw.SDA, hw.SCL, i2c.SLOW)
+i2c.setup(i2c_id, hw.SDA, hw.SCL, i2c.FASTPLUS)
 	
 wsled.init()
 wsled.show()
