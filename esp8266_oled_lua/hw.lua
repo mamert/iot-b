@@ -22,6 +22,7 @@ local mymodule = {
 	GPIO = GPIO,
 	SDA = GPIO[12],--12 / 4
 	SCL = GPIO[14] --14 / 5
+	MPU_INT = GPIO[15] -- 8
 }
 
 
