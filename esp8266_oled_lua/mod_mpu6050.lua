@@ -2,6 +2,8 @@
 
 local _id  = 0 -- always 0
 local MPU6050SlaveAddress = 0x68
+local _int_pin
+local _ondataCb
 
 local AccelScaleFactor = 16384;   -- sensitivity scale factor respective to full scale setting provided in datasheet 
 local GyroScaleFactor = 131;
@@ -56,8 +58,9 @@ local function unsignTosigned16bit(num)   -- convert unsigned 16-bit no. to sign
     return num
 end
 
-local function MPU6050_Init(i2c_id) --configure MPU6050
+local function MPU6050_Init(i2c_id, int_pin) --configure MPU6050
 	_id = i2c_id
+	_int_pin = int_pin
     tmr.delay(150000)
     I2C_Write(MPU6050SlaveAddress, MPU6050_REGISTER_SMPLRT_DIV, 0x07)
     I2C_Write(MPU6050SlaveAddress, MPU6050_REGISTER_PWR_MGMT_1, 0x01)
@@ -73,7 +76,7 @@ end
 
 
 
-local function printVals()
+local function cycle()
     data = I2C_Read(MPU6050SlaveAddress, MPU6050_REGISTER_ACCEL_XOUT_H, 14)
     
     AccelX = unsignTosigned16bit((bit.bor(bit.lshift(string.byte(data, 1), 8), string.byte(data, 2))))
@@ -91,17 +94,19 @@ local function printVals()
     GyroX = GyroX/GyroScaleFactor
     GyroY = GyroY/GyroScaleFactor
     GyroZ = GyroZ/GyroScaleFactor
-    
-    print(string.format("Ax:%.3g Ay:%.3g Az:%.3g T:%.3g Gx:%.3g Gy:%.3g Gz:%.3g",
-                        AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ))
-    tmr.delay(100000)   -- 100ms timer delay
+	
+    _ondataCb(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 end
 
+local function setOndataCb(cb)
+	_ondataCb = cb
+end
 
 
 local mymodule = {
 	init = MPU6050_Init,
-	printVals = printVals
+	setOndataCb = setOndataCb,
+	cycle = cycle
 }
 return mymodule
 
