@@ -9,9 +9,16 @@ local wsled = require "mod_ws2812"
 
 -- program
 
+--to turn off WS Leds
+gpio.mode(4, gpio.OUTPUT)
+gpio.write(4, gpio.HIGH)
+
 wifi.setmode(wifi.NULLMODE)
 
+local i2c_id = 0
+i2c.setup(i2c_id, hw.SDA, hw.SCL, i2c.SLOW)
+	
 wsled.init()
 wsled.show()
-display.init(hw,fw)
+display.init(fw, i2c_id)
 display.draw()

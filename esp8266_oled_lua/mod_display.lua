@@ -2,17 +2,13 @@
 -- > local display = require "display"
 -- if need to unload: package.loaded.display = nil
 
-local _hw
 local _fw
 local _disp
 
-local function init(hw, fw)
-	_hw = hw
+local function init(fw, i2c_id)
 	_fw = fw
-    local id = 0
     local sla = 0x3c
-    i2c.setup(id, _hw.SDA, _hw.SCL, i2c.SLOW)
-	_disp = u8g2.ssd1306_i2c_128x64_vcomh0(id, sla) -- vcomh0 has greater brightness range than noname
+	_disp = u8g2.ssd1306_i2c_128x64_vcomh0(i2c_id, sla) -- vcomh0 has greater brightness range than noname
 	_disp:setContrast(1) -- brightness (1-255). Very little effect.
 	--_disp:setDrawColor(1) -- 2 ix XOR
 	--u8g2._disp:setFontDirection(0)  -- 0-3, it's ROTATION
