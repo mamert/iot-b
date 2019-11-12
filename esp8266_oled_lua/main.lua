@@ -5,6 +5,7 @@ local fw = require "fw"
 local hw = require "hw"
 local display = require "mod_display"
 local wsled = require "mod_ws2812"
+local mpu = require "mod_mpu6050"
 
 
 -- program
@@ -22,3 +23,5 @@ wsled.init()
 wsled.show()
 display.init(fw, i2c_id)
 display.draw()
+mpu.init(i2c_id)
+mpu.printVals()
