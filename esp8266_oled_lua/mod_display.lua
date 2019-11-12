@@ -30,7 +30,7 @@ local function drawItemDesc()
 	local xpos=0
 	set_font(_fw.FONT.M)
 	_disp:drawStr(xpos+1, ypos, "Cardboard Greave R")
-	_disp:drawStr(xpos+2, ypos, "Cardboard Greave R")
+	--_disp:drawStr(xpos+2, ypos, "Cardboard Greave R")
 
 
 	set_font(_fw.FONT.S)
