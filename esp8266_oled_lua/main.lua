@@ -9,6 +9,11 @@ local wsled = require "mod_ws2812"
 local mpu = require "mod_mpu6050"
 local mpuTmr = tmr.create()
 
+local BTN_THROTTLE_PERIOD = 60000 -- microseconds
+local btnLastClick = 0
+
+local dataSource = 0
+
 mpuData = {AccelX=Stats:new(), AccelY=Stats:new(), AccelZ=Stats:new(), Temperature=Stats:new(), GyroX=Stats:new(), GyroY=Stats:new(), GyroZ=Stats:new()}
 
 function onMpuData(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
@@ -21,22 +26,31 @@ function onMpuData(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 	mpuData["GyroZ"]:update(GyroZ)
 	
 	wsled.show(AccelX, AccelY, AccelZ, GyroX, GyroY, GyroZ)
-	print(string.format("Ax:%s Ay:%s Az:%s T:%s Gx:%s Gy:%s Gz:%s",
-                        tostring(mpuData["AccelX"]),
-						tostring(mpuData["AccelY"]),
-						tostring(mpuData["AccelZ"]),
-						tostring(mpuData["Temperature"]),
-						tostring(mpuData["GyroX"]),
-						tostring(mpuData["GyroY"]),
-						tostring(mpuData["GyroZ"])))
+	--print(string.format("Ax:%s Ay:%s Az:%s T:%s Gx:%s Gy:%s Gz:%s",
+	print(string.format("%s %s %s",
+                        tostring(mpuData[dataSource == 0 and "AccelX" or "GyroX"]),
+						tostring(mpuData[dataSource == 0 and "AccelY" or "GyroY"]),
+						tostring(mpuData[dataSource == 0 and "AccelZ" or "GyroZ"])))
+						
 	mpuTmr:start() -- since ALARM_SEMI
+end
+
+function onBtnPressed()
+	local now = tmr.now()
+	local delta = now - btnLastClick
+	if delta < 0 then delta = delta + 2147483647 end; -- timer.now() uint31 rollover, see http://www.esp8266.com/viewtopic.php?f=24&t=4833&start=5#p29127
+	if delta > BTN_THROTTLE_PERIOD then
+		dataSource = (dataSource+1)%2
+		btnLastClick = now
+	end
 end
 
 -- program
 
 --to turn off WS Leds
-gpio.mode(4, gpio.OUTPUT)
-gpio.write(4, gpio.HIGH)
+gpio.mode(hw.BTN, gpio.INT)
+gpio.mode(hw.BTN,gpio.INT,gpio.PULLUP)
+gpio.trig(hw.BTN,"down",onBtnPressed)
 
 wifi.setmode(wifi.NULLMODE)
 
