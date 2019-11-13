@@ -13,13 +13,13 @@ local function getColor(val)
 	return ret
 end
 
-local function show(AccelX, AccelY, AccelZ, GyroX, GyroY, GyroZ)
-	_buf:set(1,getColor(AccelX))
-	_buf:set(2,getColor(AccelY))
-	_buf:set(3,getColor(AccelZ))
-	_buf:set(4,getColor(GyroX))
-	_buf:set(5,getColor(GyroY))
-	_buf:set(6,getColor(GyroZ))
+local function show(mpuData)
+	_buf:set(1,getColor(mpuData["AccelX"].val))
+	_buf:set(2,getColor(mpuData["AccelY"].val))
+	_buf:set(3,getColor(mpuData["AccelZ"].val))
+	_buf:set(4,getColor(mpuData["GyroX"].val))
+	_buf:set(5,getColor(mpuData["GyroY"].val))
+	_buf:set(6,getColor(mpuData["GyroZ"].val))
 	ws2812.write(_buf)
 end
 
