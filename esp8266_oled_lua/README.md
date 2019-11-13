@@ -7,5 +7,5 @@ on every data channel
 moving window:
 * normalize by highest/lowestget
 * get (diff of peaks (how close the highs are, same for lows), pythagorate that with peak distance diff
-* lowest above value: most trustworthy axis/lowpassValue combo
+* lowest above value, multiplied by ((scaled to norm)amplitude + const): most trustworthy axis/lowpassValue combo
 * from that one, peaks are rep counts

@@ -1,5 +1,5 @@
 
-function sout(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
+function sout(dataSource, AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 	--print(string.format("Ax:%s Ay:%s Az:%s T:%s Gx:%s Gy:%s Gz:%s",
 	print(string.format("%s %s %s",
                         tostring(mpuData[dataSource == 0 and "AccelX" or "GyroX"]),

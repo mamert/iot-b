@@ -14,6 +14,7 @@ local BTN_THROTTLE_PERIOD = 60000 -- microseconds
 local btnLastClick = 0
 
 local dataSource = 0
+local DATA_SOURCE_MODES = 2
 
 mpuData = {AccelX=Stats:new(), AccelY=Stats:new(), AccelZ=Stats:new(), Temperature=Stats:new(), GyroX=Stats:new(), GyroY=Stats:new(), GyroZ=Stats:new()}
 
@@ -27,9 +28,13 @@ function onMpuData(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 	mpuData["GyroZ"]:update(GyroZ)
 	
 	wsled.show(AccelX, AccelY, AccelZ, GyroX, GyroY, GyroZ)
-	sout(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
+	sout(dataSource, AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 						
 	mpuTmr:start() -- since ALARM_SEMI
+end
+
+function cycleMode()
+	dataSource = (dataSource+1)%DATA_SOURCE_MODES
 end
 
 function onBtnPressed()
@@ -37,7 +42,7 @@ function onBtnPressed()
 	local delta = now - btnLastClick
 	if delta < 0 then delta = delta + 2147483647 end; -- timer.now() uint31 rollover, see http://www.esp8266.com/viewtopic.php?f=24&t=4833&start=5#p29127
 	if delta > BTN_THROTTLE_PERIOD then
-		dataSource = (dataSource+1)%2
+		cycleMode()
 		btnLastClick = now
 	end
 end
