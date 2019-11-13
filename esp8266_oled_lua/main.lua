@@ -2,6 +2,7 @@
 -- blue: exactly 7 lines
 dofile("util.lua")
 dofile("val_stats.lua")
+dofile("serial_out.lua")
 local fw = require "fw"
 local hw = require "hw"
 local display = require "mod_display"
@@ -26,11 +27,7 @@ function onMpuData(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 	mpuData["GyroZ"]:update(GyroZ)
 	
 	wsled.show(AccelX, AccelY, AccelZ, GyroX, GyroY, GyroZ)
-	--print(string.format("Ax:%s Ay:%s Az:%s T:%s Gx:%s Gy:%s Gz:%s",
-	print(string.format("%s %s %s",
-                        tostring(mpuData[dataSource == 0 and "AccelX" or "GyroX"]),
-						tostring(mpuData[dataSource == 0 and "AccelY" or "GyroY"]),
-						tostring(mpuData[dataSource == 0 and "AccelZ" or "GyroZ"])))
+	sout(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 						
 	mpuTmr:start() -- since ALARM_SEMI
 end
