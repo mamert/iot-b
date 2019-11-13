@@ -19,9 +19,28 @@ local function set_font(font)
 	_disp:setFont(font)
 	_disp:setFontRefHeightExtendedText()
 	_disp:setFontMode(1)--is_transparent
-	--_disp:setFlipMode(1)--IF supported by HARDWARE
+	_disp:setFlipMode(1)--IF supported by HARDWARE
 	--_disp:setDisplayRotation(U8G2_R2)--software. Eveh has U8G2_MIRROR
 	_disp:setFontPosTop()
+end
+
+
+local function drawHUD(inBold, otherTexts)
+	local xpos=0
+	local ypos=0
+	set_font(_fw.FONT.S)
+	for k,v in pairs(otherTexts) do
+		_disp:drawStr(xpos, ypos, v)
+		ypos=ypos+8
+		if ypos > 55 then break end
+	end
+	
+	ypos=49
+	set_font(_fw.FONT.M)
+	_disp:drawStr(xpos+1, ypos, inBold)
+end
+local function drawMockHUD()
+	drawHUD("#reps: --", {"  Lorem ipsum dolor sit","   amet, consectetur","adipiscing elit, sed do"," eiusmod tempor incidi-","dunt ut labore et dolore","magna aliqua. Ut enim ad"})
 end
 
 
@@ -62,7 +81,7 @@ end
 
 local function draw()
 	_disp:clearBuffer()
-	drawItemDesc()
+	drawMockHUD()
 	_disp:sendBuffer()
 end
 
