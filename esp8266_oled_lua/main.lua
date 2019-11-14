@@ -14,7 +14,7 @@ local BTN_THROTTLE_PERIOD = 60000 -- microseconds
 local btnLastClick = 0
 
 local dataSource = 0
-local DATA_SOURCE_MODES = 2
+local DATA_SOURCE_MODES = 7
 
 mpuData = {AccelX=Stats:new(), AccelY=Stats:new(), AccelZ=Stats:new(), Temperature=Stats:new(), GyroX=Stats:new(), GyroY=Stats:new(), GyroZ=Stats:new()}
 
@@ -28,7 +28,7 @@ function onMpuData(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 	mpuData["GyroZ"]:update(GyroZ)
 	
 	wsled.show(mpuData)
-	sout(dataSource, AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
+	sout(dataSource, mpuData)
 						
 	mpuTmr:start() -- since ALARM_SEMI
 end

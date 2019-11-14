@@ -1,8 +1,7 @@
 
-function sout(dataSource, AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
-	--print(string.format("Ax:%s Ay:%s Az:%s T:%s Gx:%s Gy:%s Gz:%s",
-	print(string.format("%s %s %s",
-                        tostring(mpuData[dataSource == 0 and "AccelX" or "GyroX"]),
-						tostring(mpuData[dataSource == 0 and "AccelY" or "GyroY"]),
-						tostring(mpuData[dataSource == 0 and "AccelZ" or "GyroZ"])))
+function sout(dataSource, mpuData)
+	local d = {"AccelX", "AccelY", "AccelZ", "Temperature", "GyroX", "GyroY", "GyroZ"}
+	d = d[dataSource+1]
+	d = mpuData[d]
+	print(tostring(d))
 end
