@@ -10,7 +10,7 @@ local wsled = require "mod_ws2812"
 local mpu = require "mod_mpu6050"
 local mpuTmr = tmr.create()
 
-local BTN_THROTTLE_PERIOD = 60000 -- microseconds
+local BTN_THROTTLE_PERIOD = 150000 -- microseconds
 local btnLastClick = 0
 
 local dataSource = 0
