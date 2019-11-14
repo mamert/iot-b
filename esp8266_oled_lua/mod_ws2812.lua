@@ -13,13 +13,15 @@ local function getColor(val)
 	return ret
 end
 
-local function show(mpuData)
-	_buf:set(1,getColor(mpuData["AccelX"].val))
-	_buf:set(2,getColor(mpuData["AccelY"].val))
-	_buf:set(3,getColor(mpuData["AccelZ"].val))
-	_buf:set(4,getColor(mpuData["GyroX"].val))
-	_buf:set(5,getColor(mpuData["GyroY"].val))
-	_buf:set(6,getColor(mpuData["GyroZ"].val))
+local function show(dataSource, mpuData)
+	local s = {"AccelX", "AccelY", "AccelZ", "Temperature", "GyroX", "GyroY", "GyroZ"}
+	s = s[dataSource+1]
+	local d = {"AccelX", "AccelY", "AccelZ", "GyroX", "GyroY", "GyroZ"}
+	for i = 1,6 do
+		x = d[i]
+		local val = x==s and mpuData[x].val or 0
+		_buf:set(i,getColor(val))
+	end
 	ws2812.write(_buf)
 end
 

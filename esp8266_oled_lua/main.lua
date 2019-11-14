@@ -27,7 +27,7 @@ function onMpuData(AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ)
 	mpuData["GyroY"]:update(GyroY)
 	mpuData["GyroZ"]:update(GyroZ)
 	
-	wsled.show(mpuData)
+	wsled.show(dataSource, mpuData)
 	sout(dataSource, mpuData)
 						
 	mpuTmr:start() -- since ALARM_SEMI
