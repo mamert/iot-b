@@ -65,9 +65,12 @@ void setup() {
   // change PWM frequency: timer0: pins 5 & 6;
   // why do it? No high-pitched noise, better torque @ low duty
   // WARNING! Also affects TIME (millis(), and delay()).
-  TCCR0B = (TCCR0B & 0b11111000) | 0x05;
-  // 0x03, prescaler 64,  976.5625Hz; default
-  // 0x05, prescaler 1024,  61.03515625Hz
+  TCCR0B = (TCCR0B & 0b11111000) | 0x04;
+  // 0x01, prescaler 1,		62500Hz
+  // 0x02, prescaler 8,		7812.5Hz
+  // 0x03, prescaler 64,	976.5625Hz; default
+  // 0x04, prescaler 256,	244.140625Hz
+  // 0x05, prescaler 1024,	61.03515625Hz
 
 
   
@@ -79,7 +82,7 @@ void setup() {
   //    swapAxes ? outB1Pin : outB2Pin, outBEnPin,
   //    &((new InputAxis(ax2Pin, 0, centerB, 1023, threshold, vMinPwm, 255, &io))->curve(true)));
   ax3 = new BTS7960(outCLEnPin, outCLPwmPin, outCREnPin, outCRPwmPin,
-      &((new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 8, 60))->curve(true)));
+      &((new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 10, 200))->curve(true)));
 }
 
 void loop() {
@@ -94,5 +97,5 @@ void loop() {
 //  trigVal = digitalRead(trigPin);
 //  Serial.println(trigVal);
   
-  delay(2); // times 16, see timer0 prescaler change in setup()
+  delay(6); // see timer0 prescaler change in setup() (@1kH we want 20-30)
 }
