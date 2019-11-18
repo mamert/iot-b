@@ -17,7 +17,7 @@ int ax1Pin = A0;
 int ax2Pin = A1;
 int trigPin = 4;
 int firePin = 5;
-// L298N motor driver
+// L298N motor driver (switch A1/A2 for grabber)
 int outA1Pin = 2;
 int outA2Pin = 4;
 int outAEnPin = 6; // Timer0
@@ -25,10 +25,10 @@ int outB1Pin = 8;
 int outB2Pin = 7;
 int outBEnPin = 5; // Timer0
 // BTS7960 motor driver
-int outCLEnPin = A2; // brown jumper
-int outCLPwmPin = 10; // white jumper
-int outCREnPin = A3; // orange jumper
-int outCRPwmPin = 9; // grey jumper
+int outCLEnPin = A3;
+int outCLPwmPin = 9;
+int outCREnPin = A2;
+int outCRPwmPin = 10;
 
 int outTrigPin = 9;
 int outFirePin = 3;
