@@ -25,9 +25,7 @@ int outB1Pin = 8;
 int outB2Pin = 7;
 int outBEnPin = 5; // Timer0
 // BTS7960 motor driver
-int outCLEnPin = 8;
 int outCLPwmPin = 6;
-int outCREnPin = 7;
 int outCRPwmPin = 5;
 
 int outTrigPin = 9;
@@ -81,7 +79,7 @@ void setup() {
   //axV = new L298N(swapAxes ? outB2Pin : outB1Pin, 
   //    swapAxes ? outB1Pin : outB2Pin, outBEnPin,
   //    &((new InputAxis(ax2Pin, 0, centerB, 1023, threshold, vMinPwm, 255, &io))->curve(true)));
-  ax3 = new BTS7960(outCLEnPin, outCLPwmPin, outCREnPin, outCRPwmPin,
+  ax3 = new BTS7960(outCLPwmPin, outCRPwmPin,
       &((new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 10, 200))->curve(true)));
 }
 
