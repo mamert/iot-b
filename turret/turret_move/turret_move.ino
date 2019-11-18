@@ -62,7 +62,7 @@ void setup() {
   pinMode(swapAxesPin, INPUT_PULLUP);
   pinMode(outTrigPin, OUTPUT);
   pinMode(outFirePin, OUTPUT);
-  // change PWN frequency: timer0: pins 5 & 6;
+  // change PWM frequency: timer0: pins 5 & 6;
   // why do it? No high-pitched noise, better torque @ low duty
   // WARNING! Also affects TIME (millis(), and delay()).
   TCCR0B = (TCCR0B & 0b11111000) | 0x05;
