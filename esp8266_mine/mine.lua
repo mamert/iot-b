@@ -33,6 +33,8 @@ end
 
 
 tmr.create():alarm(1000, tmr.ALARM_AUTO, function() play("beep_8bit16kHz.aiff") end)
+--gpio.mode(hw.TRIGGER,gpio.INT)
+--gpio.trig(hw.TRIGGER, "up", function(lv,when) play("armed_8bit16kHz.aiff") end)
 
 
 
