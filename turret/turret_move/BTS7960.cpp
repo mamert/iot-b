@@ -30,6 +30,7 @@ void BTS7960::update() {
   
   analogWrite(_pwmLPin, _inputAxis->isForward ? 0 : _inputAxis->outVal);
   analogWrite(_pwmRPin, _inputAxis->isForward ? _inputAxis->outVal : 0);
+// does enabling only 1 direction at a time just not work? Why are there 2 pins, then?
 //  digitalWrite(_enLPin, _inputAxis->isForward ? LOW : (_inputAxis->outVal > 0 ? HIGH : LOW));
 //  digitalWrite(_enRPin, _inputAxis->isForward ? (_inputAxis->outVal > 0 ? HIGH : LOW) : LOW);  
   digitalWrite(_enLPin, HIGH);

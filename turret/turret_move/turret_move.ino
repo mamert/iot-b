@@ -5,6 +5,7 @@
 
 #include "InputAxis.h"
 #include "L298N.h"
+#include "BTS7960.h"
 
 
 EXPAND io(0x01);      //port expander with address 0x01
@@ -16,24 +17,28 @@ int ax1Pin = A0;
 int ax2Pin = A1;
 int trigPin = 4;
 int firePin = 5;
-// motor driver
+// L298N motor driver
 int outA1Pin = 2;
 int outA2Pin = 4;
 int outAEnPin = 6; // Timer0
 int outB1Pin = 8;
 int outB2Pin = 7;
 int outBEnPin = 5; // Timer0
+// BTS7960 motor driver
+int outCLEnPin = A2; // brown jumper
+int outCLPwmPin = 10; // white jumper
+int outCREnPin = A3; // orange jumper
+int outCRPwmPin = 9; // grey jumper
+
 int outTrigPin = 9;
 int outFirePin = 3;
 
 int swapAxesPin = 10;
 
 // also available for later use on arm thing:
-// 03(PWM T2): thin green
 // 11(PWM T2): thin white
 // 12: thin yellow
 // 10(PWM T1): white jumper
-// 09(PWM T1): grey jumper
 // A2: brown jumper
 // A3: orange jumper
 
@@ -49,6 +54,7 @@ int hMinPwm = 12;
 int vMinPwm = 14;
 
 L298N *axH, *axV;
+BTS7960 *ax3;
 
 void setup() {
   Wire.begin();
@@ -72,11 +78,14 @@ void setup() {
   axV = new L298N(swapAxes ? outB2Pin : outB1Pin, 
       swapAxes ? outB1Pin : outB2Pin, outBEnPin,
       &((new InputAxis(ax2Pin, 0, centerB, 1023, threshold, vMinPwm, 255, &io))->curve(true)));
+//  ax3 = new BTS7960(outCLEnPin, outCLPwmPin, outCREnPin, outCRPwmPin,
+//      &((new InputAxis(ax2Pin, 0, centerB, 1023, threshold, 8, 60))->curve(true)));
 }
 
 void loop() {
   axH->update();
   axV->update();
+//  ax3->update();
   bool temp = io.digitalReadPullup(trigPin);
   digitalWrite(outTrigPin, temp);
   temp = io.digitalReadPullup(firePin);
