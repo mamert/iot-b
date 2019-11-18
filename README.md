@@ -1,15 +1,5 @@
 # iot-b
-the portable one
 
+Code testing area. Random pieces of programs both bizarre and mundane.
 
-generic GPIO control
-* pin-state
-* PWM (pin-duty; and frequency as separate request)
-* arg: how long to hold (note: pullups!)
-* DATA: json of delay-change tuples
-* evolve: WS2812B, etc
-
-
-relay: add persistence?
-
-in init: execute module that compiles & deletes all lua files
+Warning! May contain weapons-grade bad practices, things abandoned halfway through, etc.
