@@ -35,7 +35,7 @@ InputAxis& InputAxis::curve(boolean value) {
 
 int InputAxis::_curve_it(int val, int limit) {
   unsigned long tmp = (((unsigned long)val) << 10) / limit; // unsigned long, 0-1 * 1024
-  return (int)((tmp*val) >> 10); // square & divide
+  return (int)((tmp*val) >> 10); // square & divide. *val is equal to *tmp*limit
 }
 
 void InputAxis::update() {
