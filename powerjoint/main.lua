@@ -1,7 +1,10 @@
 dofile("util.lua")
 dofile("val_stats.lua")
 local hw = require "hw"
-local mpuTmr = tmr.create()
+local timer = tmr.create()
+
+local sound = require "mod_sound"
+local beepCount = 0
 
 local DEADZONE_R = 200000
 local VAL_NOLOAD = 157000
@@ -41,22 +44,33 @@ function onTick()
 	-- TODO: hardware: RATE pin pullup not pulldown, for 80Hz rather than 10
 	print(tostring(data))
 	moveMotorByAxis(data)
-	mpuTmr:start() -- since ALARM_SEMI
+	timer:start() -- since ALARM_SEMI
+end
+
+function onStartingTick()
+	if beepCount >= 10 then
+		timer:unregister()
+		
+		pwm.setup(hw.MOTOR_PWM1, 222, 0)
+		pwm.setup(hw.MOTOR_PWM2, 222, 0)
+		pwm.start(hw.MOTOR_PWM1)
+		pwm.start(hw.MOTOR_PWM2)
+		
+		timer:alarm(20, tmr.ALARM_SEMI, onTick)
+	else
+		sound.beep(hw.MOTOR_PWM2)
+		print("beep")
+		beepCount = beepCount+1
+	end
 end
 
 
 -- program
-
 wifi.setmode(wifi.NULLMODE)
-
-pwm.setup(hw.MOTOR_PWM1, 222, 0)
-pwm.setup(hw.MOTOR_PWM2, 222, 0)
-pwm.start(hw.MOTOR_PWM1)
-pwm.start(hw.MOTOR_PWM2)
 
 hx711.init(hw.HX711_CLK, hw.HX711_DT)
 --for i=1,4 do -- to stabilize filters
 --	data:update(hx711.read())
 --end
 
-mpuTmr:alarm(20, tmr.ALARM_SEMI, onTick)
+timer:alarm(1000, tmr.ALARM_AUTO, onStartingTick)
