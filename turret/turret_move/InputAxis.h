@@ -1,6 +1,8 @@
 #ifndef InputAxis_h
 #define InputAxis_h
 #include "Arduino.h"
+#include "HX711.h"
+#include "InputSource.h"
 
 #include <Arduino_I2C_Port_Expander.h>
 
@@ -13,35 +15,40 @@ class InputAxis {
 
   public:
     boolean isForward = true;
-    int outVal = 0;
+    long outVal = 0;
 
     InputAxis(int axisAnalogPin,
-          int inValMin, int inValCenter, int inValMax, int inValDeadzone,
-          int outValMin, int outValMax);
-
+          long inValMin, long inValCenter, long inValMax, long inValDeadzone,
+          long outValMin, long outValMax);
+          
+    InputAxis::InputAxis(
+          long inValMin, long inValCenter, long inValMax, long inValDeadzone,
+          long outValMin, long outValMax, InputSource *inputSource);
+      
     InputAxis(int axisAnalogPin,
-          int inValMin, int inValCenter, int inValMax, int inValDeadzone,
-          int outValMin, int outValMax, EXPAND *expander);
+          long inValMin, long inValCenter, long inValMax, long inValDeadzone,
+          long outValMin, long outValMax, EXPAND *expander, InputSource *inputSource);
 
     InputAxis& curve(boolean value);
     
     void update();
     
   private:
-    int _axisAnalogPin;
-    int _inValMin;
-    int _inValCenter;
-    int _inValMax;
-    int _inValDeadzone;
-    int _outValMin;
-    int _outValMax;
+    int  _axisAnalogPin;
+    long _inValMin;
+    long _inValCenter;
+    long _inValMax;
+    long _inValDeadzone;
+    long _outValMin;
+    long _outValMax;
     EXPAND *_expander;
+    InputSource *_inputSource;
     // for map(): where the mapping starts
-    int _inMapInRangeRev;
-    int _inMapInRangeFwd;
+    long _inMapInRangeRev;
+    long _inMapInRangeFwd;
     boolean _curve;
     
-    int _curve_it(int val, int limit);
+    long _curve_it(long val, long limit);
 };
 
 #endif
