@@ -13,7 +13,7 @@ const long val_noLoad = 195046l;
 const long val_max = 1802393l;
 const long val_radius = (val_max - val_noLoad) >> 1;
 const long val_desiredPressure = val_noLoad + val_radius;
-const int minPwm = 8;
+const int minPwm = 22;
 const int maxPwm = 230; // never full duty, leave some to power the buck regulator
 
 BTS7960 *ax1;
