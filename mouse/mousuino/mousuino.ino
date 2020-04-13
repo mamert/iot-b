@@ -3,6 +3,7 @@
 #include "MPU6050.h"
 #include <Mouse.h>
 #include <Bounce2.h>
+//#include <AltSoftSerial.h>
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
     #include "Wire.h"
@@ -24,7 +25,7 @@ const unsigned long BTN_THROTTLE_DELAY = 40;
 const int btnPin[] = {10, 16, 14};
 const char mouseBtn[] = {MOUSE_LEFT, MOUSE_MIDDLE, MOUSE_RIGHT};
 Bounce * btn = new Bounce[3];
-
+//AltSoftSerial altSerial;
 
 void setup() {
     #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
@@ -33,8 +34,9 @@ void setup() {
     #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
         Fastwire::setup(400, true);
     #endif
+    Serial.begin(115200);
+    // altSerial.begin(9600); // TODO: altSerial.begin(38400);
 
-    Serial.begin(38400);
 //    while (!Serial); // wait for serial port to connect. Needed for Leonardo only
     delay(10); // we don't really care about serial if not connected, so just this instead
     
