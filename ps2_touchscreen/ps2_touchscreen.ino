@@ -35,35 +35,37 @@ char pressedMouse = 0;
 //AltSoftSerial altSerial;
 
 
-void kaoss_init()
+byte tp_write(byte val)
 {
-  touchpad.write(0xff);  // reset
-  touchpad.read();  // ack byte
+  touchpad.write(val);
+  return touchpad.read();  // ack byte, can ignore
+}
+
+void set_absolute_mode()
+{
+  // 0xE8 is normally Set resolution
+  // Synaptics PS/2 TouchPad Interfacing Guide, 4.3 Mode byte: kind of a Konami Code deal
+  // 4x set resolution + set samplerate: ( x1 * 64  +  x2 * 16  +  x3 * 4  +  x4  == modebyte )
+  tp_write(0xe8);
+  tp_write(0x03); // x1  
+  tp_write(0xe8);
+  tp_write(0x00); // x2
+  tp_write(0xe8);
+  tp_write(0x01); // x3
+  tp_write(0xe8);
+  tp_write(0x00); // x4
+  tp_write(0xf3); // F3, 14: set samplerate 20 (stores mode)
+  tp_write(0x14);
+}
+
+void tp_init()
+{
+  tp_write(0xff);  // Reset
   touchpad.read();  // blank */
   touchpad.read();  // blank */
-  touchpad.write(0xf0);  // remote mode
-  touchpad.read();  // ack
+  tp_write(0xf0);  // Set remote mode
   // advanced settings
-  touchpad.write(0xe8);
-  touchpad.read();  // ack byte
-  touchpad.write(0x03); // x1  ( x1 * 64  +  x2 * 16  +  x3 * 4  +  x4   == modebyte )
-  touchpad.read();  // ack byte
-  touchpad.write(0xe8);
-  touchpad.read();  // ack byte
-  touchpad.write(0x00); // x2
-  touchpad.read();  // ack byte
-  touchpad.write(0xe8);
-  touchpad.read();  // ack byte
-  touchpad.write(0x01); // x3
-  touchpad.read();  // ack byte
-  touchpad.write(0xe8);
-  touchpad.read();  // ack byte
-  touchpad.write(0x00); // x4
-  touchpad.read();  // ack byte
-  touchpad.write(0xf3); // set samplerate 20 (stores mode)
-  touchpad.read();  // ack byte
-  touchpad.write(0x14);
-  touchpad.read();  // ack byte
+  set_absolute_mode();
   delayMicroseconds(100);
 }
 
@@ -73,7 +75,7 @@ void setup()
     // altSerial.begin(9600); // TODO: altSerial.begin(38400);
   Keyboard.begin();
   Mouse.begin();
-  kaoss_init();
+  tp_init();
 }
 
 
@@ -122,8 +124,7 @@ void process_press(unsigned int x, unsigned int y) {
 
 void loop()
 {
-  touchpad.write(0xeb); // req data
-  touchpad.read(); // ignore ack
+  tp_write(0xeb); // req data
 
   mstat1 = touchpad.read();
   mxy = touchpad.read();
