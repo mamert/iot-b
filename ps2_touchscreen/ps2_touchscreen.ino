@@ -1,3 +1,12 @@
+/*
+ * modes:
+ * defult: buttons drawn on touchpad
+ * phys_rmb + "L": sensitive touchpad mouse (broken)
+ * phys_rmb + "R": touchpad mouse (broken)
+ * phys_rmb + " ": as default + gyro mouse (not implemented)
+ * phys_lmb_ reset to default
+ * */
+
 #include <ps2.h>
 #include <Mouse.h>
 #include <Keyboard.h>
@@ -8,8 +17,8 @@ PS2 touchpad(A2, A3);
 byte mstat1;
 byte mstat2;
 byte mxy;
-byte mx;
-byte my;
+byte mx, mx_last=0;
+byte my, my_last=0;
 byte mz;
 
 #define TOUCH_X_MIN 960
@@ -31,6 +40,7 @@ typedef struct{
   boolean touchpad_btns;
   boolean touchpad_mouse;
   boolean tilt_mouse;
+  byte sensitivity_divider;
 } T_Mode;
 
 unsigned int cx, cy;
@@ -43,9 +53,10 @@ char pressedMouse = 0;
 bool phys_lmk_down = false;
 bool phys_rmk_down = false;
 
-#define MODE_TOUCH_BTNS {true, false, false}
-#define MODE_MOUSE_TOUCHPAD_MOUSE {false, true, false}
-#define MODE_TOUCH_BTNS_TILT_MOUSE {true, false, true}
+#define MODE_TOUCH_BTNS {true, false, false, 1}
+#define MODE_MOUSE_TOUCHPAD_MOUSE1 {false, true, false, 1}
+#define MODE_MOUSE_TOUCHPAD_MOUSE2 {false, true, false, 4}
+#define MODE_TOUCH_BTNS_GYRO_MOUSE {true, false, true, 1}
 T_Mode selected_mode = MODE_TOUCH_BTNS;
 //AltSoftSerial altSerial;
 
@@ -158,9 +169,11 @@ void process_press(unsigned int x, unsigned int y) {
   if(phys_rmk_down) // modifer, not normal operation
   {
     if(MOUSE_LEFT == pressedMouse)
-      selected_mode = MODE_MOUSE_TOUCHPAD_MOUSE;
+      selected_mode = MODE_MOUSE_TOUCHPAD_MOUSE1;
     else if(MOUSE_RIGHT == pressedMouse)
-      selected_mode = MODE_TOUCH_BTNS_TILT_MOUSE;
+      selected_mode = MODE_MOUSE_TOUCHPAD_MOUSE2;
+    else if(' ' == pressedKey)
+      selected_mode = MODE_TOUCH_BTNS_GYRO_MOUSE;
   } else {
       // press them
   if(useCtrlMod)
@@ -200,6 +213,19 @@ void process_touchpad_as_btns()
   }
 }
 
+void process_touchpad_as_mouse()
+{
+  if( mz > 30 && (mx != 0 || my != 0)){ // pressed
+    byte tmp = mx_last;
+    mx_last = mx;
+    mx -= tmp;
+    tmp = my_last;
+    my_last = my;
+    my -= tmp;
+    Mouse.move((my/selected_mode.sensitivity_divider), -(mx/selected_mode.sensitivity_divider));
+  }
+}
+
 void loop()
 {
   tp_write(0xeb); // req data
@@ -216,6 +242,9 @@ void loop()
   if(phys_rmk_down || selected_mode.touchpad_btns)
   {
     process_touchpad_as_btns();
+  } else if(selected_mode.touchpad_mouse)
+  {
+    process_touchpad_as_mouse();
   }
 //  Serial.print(pressedKey, DEC);
 //  Serial.print("\t");
