@@ -27,6 +27,12 @@ unsigned int pad_1_3 = PAD_MAPPED_RANGE / 3;
 unsigned int pad_2_3 = PAD_MAPPED_RANGE * 2 / 3;
 
 
+typedef struct{
+  boolean touchpad_btns;
+  boolean touchpad_mouse;
+  boolean tilt_mouse;
+} T_Mode;
+
 unsigned int cx, cy;
 
 // touchpad-painted buttons
@@ -34,9 +40,13 @@ char pressedKey = 0;
 char pressedMouse = 0;
 
 // actual mouse buttons
-bool lmk_down = false;
-bool rmk_down = false;
+bool phys_lmk_down = false;
+bool phys_rmk_down = false;
 
+#define MODE_TOUCH_BTNS {true, false, false}
+#define MODE_MOUSE_TOUCHPAD_MOUSE {false, true, false}
+#define MODE_TOUCH_BTNS_TILT_MOUSE {true, false, true}
+T_Mode selected_mode = MODE_TOUCH_BTNS;
 //AltSoftSerial altSerial;
 
 
@@ -84,37 +94,31 @@ void setup()
 }
 
 
-void process_button_inputs() {
-  Serial.print(mstat1);
-  Serial.print("\t");
+void process_phys_button_inputs() {
   if(mstat1 & 0x1){ // lmk
-    if(!lmk_down) {
-      Mouse.press(MOUSE_LEFT);
-      lmk_down = true;
-      Serial.print("lmk d\t");
+    if(!phys_lmk_down) {
+//      Mouse.press(MOUSE_LEFT);
+      selected_mode = MODE_TOUCH_BTNS; // reset mode on lmk
+      phys_lmk_down = true;
     }
   } else {
-    if(lmk_down) {
-      Mouse.release(MOUSE_LEFT);
-      lmk_down = false;
-      Serial.print("lmk u\t");
+    if(phys_lmk_down) {
+//      Mouse.release(MOUSE_LEFT);
+      phys_lmk_down = false;
     }
   }
   
   if(mstat1 & 0x2){ // rmk
-    if(!rmk_down) {
-      Mouse.press(MOUSE_RIGHT);
-      rmk_down = true;
-      Serial.print("rmk d\t");
+    if(!phys_rmk_down) {
+//      Mouse.press(MOUSE_RIGHT);
+      phys_rmk_down = true;
     }
   } else {
-    if(rmk_down) {
-      Mouse.release(MOUSE_RIGHT);
-      rmk_down = false;
-      Serial.print("rmk u\t");
+    if(phys_rmk_down) {
+//      Mouse.release(MOUSE_RIGHT);
+      phys_rmk_down = false;
     }
   }
-  Serial.println();
 }
 
 void process_release() {
@@ -151,30 +155,27 @@ void process_press(unsigned int x, unsigned int y) {
       }
     }
   }
-  // press them
+  if(phys_rmk_down) // modifer, not normal operation
+  {
+    if(MOUSE_LEFT == pressedMouse)
+      selected_mode = MODE_MOUSE_TOUCHPAD_MOUSE;
+    else if(MOUSE_RIGHT == pressedMouse)
+      selected_mode = MODE_TOUCH_BTNS_TILT_MOUSE;
+  } else {
+      // press them
   if(useCtrlMod)
     Keyboard.press(KEY_LEFT_CTRL);
   if(pressedMouse != 0)
     Mouse.press(pressedMouse);
   if(pressedKey != 0)
     Keyboard.press(pressedKey);
+  }
 }
 
-void loop()
+void process_touchpad_as_btns()
 {
-  tp_write(0xeb); // req data
-
-  mstat1 = touchpad.read();
-  mxy = touchpad.read();
-  mz = touchpad.read(); // starts detecting even millimeters above surface
-  mstat2 = touchpad.read();
-  mx = touchpad.read();
-  my = -touchpad.read();
-
-  process_button_inputs();
-
-  if( mz > 30 && (mx != 0 || my != 0)){ // pressed
-    Serial.print("pressed \t");
+    if( mz > 30 && (mx != 0 || my != 0)){ // pressed
+//    Serial.print("pressed \t");
     if(pressedKey == 0) { // not yet pressed 
       // calc absolute values
       cx = (((mstat2 & 0x10) << 8) | ((mxy & 0x0F) << 8) | mx );
@@ -192,13 +193,32 @@ void loop()
       process_press(cx, cy);
     }
   } else { // released
-    Serial.print("released \t");
+//    Serial.print("released \t");
     if(pressedKey != 0 || pressedMouse != 0) {
       process_release();
     }
   }
-  Serial.print(pressedKey, DEC);
-  Serial.print("\t");
-  Serial.println(pressedMouse, DEC);
+}
+
+void loop()
+{
+  tp_write(0xeb); // req data
+
+  mstat1 = touchpad.read();
+  mxy = touchpad.read();
+  mz = touchpad.read(); // starts detecting even millimeters above surface
+  mstat2 = touchpad.read();
+  mx = touchpad.read();
+  my = -touchpad.read();
+
+  process_phys_button_inputs();
+
+  if(phys_rmk_down || selected_mode.touchpad_btns)
+  {
+    process_touchpad_as_btns();
+  }
+//  Serial.print(pressedKey, DEC);
+//  Serial.print("\t");
+//  Serial.println(pressedMouse, DEC);
   delay(100);
 }
