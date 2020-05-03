@@ -29,8 +29,13 @@ unsigned int pad_2_3 = PAD_MAPPED_RANGE * 2 / 3;
 
 unsigned int cx, cy;
 
+// touchpad-painted buttons
 char pressedKey = 0;
 char pressedMouse = 0;
+
+// actual mouse buttons
+bool lmk_down = false;
+bool rmk_down = false;
 
 //AltSoftSerial altSerial;
 
@@ -78,6 +83,39 @@ void setup()
   tp_init();
 }
 
+
+void process_button_inputs() {
+  Serial.print(mstat1);
+  Serial.print("\t");
+  if(mstat1 & 0x1){ // lmk
+    if(!lmk_down) {
+      Mouse.press(MOUSE_LEFT);
+      lmk_down = true;
+      Serial.print("lmk d\t");
+    }
+  } else {
+    if(lmk_down) {
+      Mouse.release(MOUSE_LEFT);
+      lmk_down = false;
+      Serial.print("lmk u\t");
+    }
+  }
+  
+  if(mstat1 & 0x2){ // rmk
+    if(!rmk_down) {
+      Mouse.press(MOUSE_RIGHT);
+      rmk_down = true;
+      Serial.print("rmk d\t");
+    }
+  } else {
+    if(rmk_down) {
+      Mouse.release(MOUSE_RIGHT);
+      rmk_down = false;
+      Serial.print("rmk u\t");
+    }
+  }
+  Serial.println();
+}
 
 void process_release() {
   Mouse.release(MOUSE_ALL);
@@ -133,6 +171,7 @@ void loop()
   mx = touchpad.read();
   my = -touchpad.read();
 
+  process_button_inputs();
 
   if( mz > 30 && (mx != 0 || my != 0)){ // pressed
     Serial.print("pressed \t");
