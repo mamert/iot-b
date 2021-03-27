@@ -20,3 +20,6 @@ TODO:
 ** a BT module (no longer needs Pro micro, a Pro Mini will suffice)
 ** RPi0W with hidclient (first connect via USB, later skip arduino)
 * use MPU-6050's DMP rather than raw input
+
+
+Calibration: ../misc_utils/MPU6050_calibrate
