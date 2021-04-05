@@ -3,38 +3,40 @@
 
 
 
-void mpu6050_setOffsets(MPU6050 accelgyro) {
+void mpu6050_setOffsets(MPU6050 mpu) {
     // for module marked "02"
-//    accelgyro.setXAccelOffset(-958);
-//    accelgyro.setYAccelOffset(-5752);
-//    accelgyro.setZAccelOffset(1795);
-//    accelgyro.setXGyroOffset(177);
-//    accelgyro.setYGyroOffset(11);
-//    accelgyro.setZGyroOffset(-17);
+//    mpu.setXAccelOffset(-958);
+//    mpu.setYAccelOffset(-5752);
+//    mpu.setZAccelOffset(1795);
+//    mpu.setXGyroOffset(177);
+//    mpu.setYGyroOffset(11);
+//    mpu.setZGyroOffset(-17);
 
-    // for module marked "03", on Lenovo headphones
-//    accelgyro.setXAccelOffset(2119);
-//    accelgyro.setYAccelOffset(-3135);
-//    accelgyro.setZAccelOffset(909);
-//    accelgyro.setXGyroOffset(-251);
-//    accelgyro.setYGyroOffset(-15);
-//    accelgyro.setZGyroOffset(-20);
+    // for module "03", buried in white-grey PCL
+//    mpu.setXAccelOffset(2068);
+//    mpu.setYAccelOffset(-3122);
+//    mpu.setZAccelOffset(849);
+//    mpu.setXGyroOffset(-205);
+//    mpu.setYGyroOffset(-40);
+//    mpu.setZGyroOffset(-12);
+
 	
 	// for module on 1st ESP32+duino
-	accelgyro.setXAccelOffset(-1336);
-	accelgyro.setYAccelOffset(2030);
-	accelgyro.setZAccelOffset(857);
-	accelgyro.setXGyroOffset(108);
-	accelgyro.setYGyroOffset(-21);
-	accelgyro.setZGyroOffset(20);
+	mpu.setXAccelOffset(-1336);
+	mpu.setYAccelOffset(2030);
+	mpu.setZAccelOffset(857);
+	mpu.setXGyroOffset(108);
+	mpu.setYGyroOffset(-21);
+	mpu.setZGyroOffset(20);
 
     // for module marked "04", 90\deg pins
-//    accelgyro.setXAccelOffset(-350);
-//    accelgyro.setYAccelOffset(-4742);
-//    accelgyro.setZAccelOffset(1435);
-//    accelgyro.setXGyroOffset(92);
-//    accelgyro.setYGyroOffset(14);
-//    accelgyro.setZGyroOffset(-22);
+//    mpu.setXAccelOffset(-345);
+//    mpu.setYAccelOffset(-4746);
+//    mpu.setZAccelOffset(1453);
+//    mpu.setXGyroOffset(97);
+//    mpu.setYGyroOffset(21);
+//    mpu.setZGyroOffset(3);
+
 
     // for module marked "05", flat pins
 //    mpu.setXAccelOffset(-4963);
@@ -44,6 +46,20 @@ void mpu6050_setOffsets(MPU6050 accelgyro) {
 //    mpu.setYGyroOffset(-13);
 //    mpu.setZGyroOffset(-7);
 
-
+    // for module marked "06", 90\deg pins
+//    mpu.setXAccelOffset(-1940);
+//    mpu.setYAccelOffset(-1396);
+//    mpu.setZAccelOffset(320);
+//    mpu.setXGyroOffset(-179);
+//    mpu.setYGyroOffset(-4);
+//    mpu.setZGyroOffset(140);
+    
+    // for module marked "07", 90\deg pins
+//    mpu.setXAccelOffset(1448);
+//    mpu.setYAccelOffset(1230);
+//    mpu.setZAccelOffset(678);
+//    mpu.setXGyroOffset(-18);
+//    mpu.setYGyroOffset(53);
+//    mpu.setZGyroOffset(23);
 
 }
