@@ -8,19 +8,19 @@ gc.collect()
 from math import sqrt
 from algo import approx_len
 from mpu6050 import MPU6050 as IMU
-from imu_out_txt import ImuOutTxt, ImuOutStatsTxt
+#from imu_out_txt import ImuOutTxt, ImuOutStatsTxt
 gc.collect()
 from out_pwm import Out2PWM
 from data_filter import ListFilter as F, ExponentialSmoother as ES, MovingAvg as MA, MovingMax as MMAX
 #gc.collect()
 
-#SCL_PIN = 5  # GPIO 5 is D1
-#SDA_PIN = 4  # GPIO 4 is D2
+LED0_PIN = 5  # GPIO 5 is D1
+LED1_PIN = 4  # GPIO 4 is D2
+WS_PIN = 2 # D4
 SCL_PIN = 14  # GPIO 14 is D5
 SDA_PIN = 12  # GPIO 12 is D6
-
-LED0_PIN = 13  # GPIO 13 is D7
-LED1_PIN = 14  # GPIO 14 is D5
+BTN_PIN = 13 # D7
+MPU_INT_PIN = 15 # D8
 
 WS_LEDS = 6
 WS_PIN = 12  # GPIO 12 is D6. Warn: doesn't work on that module?
