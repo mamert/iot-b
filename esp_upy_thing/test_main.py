@@ -1,6 +1,6 @@
-import uasyncio as asyncio
-from machine import I2C, Pin
+from machine import I2C, Pin, soft_reset
 from time import ticks_ms, ticks_diff
+import uasyncio as aio
 
 import gc
 gc.collect()
@@ -14,13 +14,32 @@ from out_pwm import Out2PWM
 from data_filter import ListFilter as F, ExponentialSmoother as ES, MovingAvg as MA, MovingMax as MMAX
 #gc.collect()
 
-LED0_PIN = 5  # GPIO 5 is D1
-LED1_PIN = 4  # GPIO 4 is D2
-WS_PIN = 2 # D4
-SCL_PIN = 14  # GPIO 14 is D5
-SDA_PIN = 12  # GPIO 12 is D6
-BTN_PIN = 13 # D7
-MPU_INT_PIN = 15 # D8
+D1=5
+D2=4
+D4=2
+D5=14
+D6=12
+D7 = 13
+D8=15
+D11=9 # can cause reset
+D12=10 # sometimes input only
+
+#LED0_PIN = D1
+#LED1_PIN = D2
+WS_PIN = D4
+#SCL_PIN = D5
+#SDA_PIN = D6
+#BTN_PIN = D7
+#MPU_INT_PIN = D8
+
+
+SDA_PIN = D1
+SCL_PIN = D2
+LED0_PIN = D5
+LED1_PIN = D6
+
+
+
 
 WS_LEDS = 6
 WS_PIN = 12  # GPIO 12 is D6. Warn: doesn't work on that module?
@@ -47,7 +66,7 @@ magnitudes = ( # rma(max), abs_max
     (6000, 15700), # v. fast
 )
 
-async def imu_task(imu):
+async def imu_coro(imu):
     print('Running...')
     outputs = [
         #ImuOutTxt(OUT_C),
@@ -75,7 +94,7 @@ async def imu_task(imu):
         now = ticks_ms()
         delta = ticks_diff(now, last)
         last = now
-        await asyncio.sleep_ms(MPU_POLL_MS-delta)
+        await aio.sleep_ms(MPU_POLL_MS-delta)
 
 
 def main():
@@ -84,12 +103,15 @@ def main():
     #imu.val_test()
     #gc.collect()
     #mem_info()
+    loop = aio.get_event_loop()
+    loop.create_task(imu_coro(imu))
     try:
-        asyncio.run(imu_task(imu))
+        loop.run_forever()
     except KeyboardInterrupt:
         print('Interrupted')
     finally:
-        asyncio.new_event_loop()
+        #aio.new_event_loop()
+        soft_reset()
 
 
 main()

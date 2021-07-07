@@ -7,8 +7,8 @@ class Out2PWM:
         self.thr1, self.magn1 = v_med, v_max-v_med
         self.scale0 = 256.0/self.magn0/self.magn0
         self.scale1 = 128.0/self.magn1/self.magn1 # half magn
-        self.pwm0 = PWM(Pin(pin0), freq=20, duty=0)
-        self.pwm1 = PWM(Pin(pin1), freq=200, duty=0)
+        self.pwm0 = PWM(Pin(pin0), freq=64, duty=0)
+        self.pwm1 = PWM(Pin(pin1), freq=64, duty=0)
 
     def update(self, val):
         v0 = min(max(0, val-self.thr0), self.magn0)
