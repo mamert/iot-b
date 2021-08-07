@@ -19,7 +19,7 @@ local function set_font(font)
 	_disp:setFont(font)
 	_disp:setFontRefHeightExtendedText()
 	_disp:setFontMode(1)--is_transparent
-	_disp:setFlipMode(1)--IF supported by HARDWARE
+	--_disp:setFlipMode(1)--IF supported by HARDWARE
 	--_disp:setDisplayRotation(U8G2_R2)--software. Eveh has U8G2_MIRROR
 	_disp:setFontPosTop()
 end
@@ -48,40 +48,48 @@ local function drawItemDesc()
 	local ypos=0
 	local xpos=0
 	set_font(_fw.FONT.M)
-	_disp:drawStr(xpos+1, ypos, "Cardboard Greave R")
-	--_disp:drawStr(xpos+2, ypos, "Cardboard Greave R")
-
+	_disp:drawStr(xpos+9, ypos, "Eyepiece of OLED")
 
 	set_font(_fw.FONT.S)
 	ypos=16
-	xpos=20
-	_disp:drawStr(xpos, ypos, "of Cardboard Armor Set")
+	xpos=18
+	_disp:drawStr(xpos+3, ypos, "of Prototype Acc. Set")
 	ypos=ypos+8+1
 	set_font(_fw.FONT.M)
 	xpos=8
 	_disp:drawStr(xpos, ypos, "+5")
 	set_font(_fw.FONT.S)
-	_disp:drawStr(xpos+18, ypos+3, "to Virginity Defense")
+	_disp:drawStr(xpos+21, ypos+3, "to Base Badassery")
 	ypos=ypos+15
-	xpos=7
+	xpos=8
 	_disp:drawStr(xpos+13, ypos, "Durability:")
-	_disp:drawStr(xpos+70, ypos, "1")
-	_disp:drawStr(xpos+71, ypos, "1")
+	_disp:drawStr(xpos+70, ypos, "3")
+	_disp:drawStr(xpos+71, ypos, "3")
 	_disp:drawStr(xpos+81, ypos, "of")
-	_disp:drawStr(xpos+96, ypos, "1")
-	_disp:drawStr(xpos+97, ypos, "1")
+	_disp:drawStr(xpos+96, ypos, "3")
+	_disp:drawStr(xpos+97, ypos, "3")
 	ypos=ypos+8
-	xpos=15
-	_disp:drawStr(xpos, ypos, "Required Strength: 0")
+	xpos=11
+	_disp:drawStr(xpos, ypos, "Required Hackitude: 40")
 	ypos=ypos+8
-	xpos=7
-	_disp:drawStr(xpos, ypos, "Required Confidence: 50")
+	xpos=22
+	_disp:drawStr(xpos, ypos, "Required Tech: 15")
+	_disp:drawLine(0, 16, 0, 47)
+	_disp:drawLine(127, 16, 127, 47)
 end
 
 
-local function draw()
+local function draw(t)
 	_disp:clearBuffer()
-	drawMockHUD()
+	tmp6 = math.floor(t / 100000) % 1000000
+	tmp1 = tmp6 % 10
+	tmp2 = math.floor(tmp6 / 10)
+	if tmp1 < 2 then
+		set_font(_fw.FONT.L_DIGITS)
+		_disp:drawStr(0, 25, tmp2)
+	else
+		drawItemDesc()
+	end
 	_disp:sendBuffer()
 end
 
